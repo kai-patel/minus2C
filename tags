@@ -1,0 +1,523 @@
+.c.o	Makefile	/^.c.o:$/
+ADD	gentac.c	13
+APPLY	C.tab.c	120
+APPLY	C.tab.h	60
+AUTO	C.tab.c	116
+AUTO	C.tab.h	56
+BEGIN	lex.yy.c	79
+BINDING	frame.c	9
+BINDING	frame.h	6
+BREAK	C.tab.c	126
+BREAK	C.tab.h	66
+C.tab.c	Makefile	/^C.tab.c:	C.y$/
+CALL	gentac.c	13
+CC	Makefile	/^CC = gcc$/
+CONSTANT	C.tab.c	109
+CONSTANT	C.tab.h	49
+CONTINUE	C.tab.c	125
+CONTINUE	C.tab.h	65
+DIV	gentac.c	13
+ECHO	lex.yy.c	525
+ELSE	C.tab.c	123
+ELSE	C.tab.h	63
+EOB_ACT_CONTINUE_SCAN	lex.yy.c	104
+EOB_ACT_END_OF_FILE	lex.yy.c	105
+EOB_ACT_LAST_MATCH	lex.yy.c	106
+EQ_OP	C.tab.c	113
+EQ_OP	C.tab.h	53
+EXIT_SUCCESS	C.tab.c	279
+EXIT_SUCCESS	C.tab.c	307
+EXTERN	C.tab.c	115
+EXTERN	C.tab.h	55
+FALSE	token.h	5
+FLEX_SCANNER	lex.yy.c	7
+FRAME	frame.c	14
+FRAME	frame.h	8
+FRAME_H	frame.h	5
+FS	C.flex	/^FS			(f|F|l|L)$/
+FUNCTION	C.tab.c	119
+FUNCTION	C.tab.h	59
+GE_OP	C.tab.c	112
+GE_OP	C.tab.h	52
+HASH_SIZE	symbol_table.c	18
+IDENTIFIER	C.tab.c	108
+IDENTIFIER	C.tab.h	48
+IF	C.tab.c	122
+IF	C.tab.h	62
+INT	C.tab.c	117
+INT	C.tab.h	57
+LEAF	C.tab.c	121
+LEAF	C.tab.h	61
+LE_OP	C.tab.c	111
+LE_OP	C.tab.h	51
+MOD	gentac.c	13
+MUL	gentac.c	13
+Ma	a.c	/^int main() {$/
+Mlex.yy	lex.yy.c	/^int main()$/
+Mmain	main.c	/^int main(int argc, char** argv) {$/
+Mresults.out	results.out	/^int main() { return; }$/
+Mresults.out	results.out	/^int main() { return 1+2;}$/
+Mresults.out	results.out	/^int main() { return 5-3;}$/
+Mresults.out	results.out	/^int main() { return 10\/2; }$/
+Mresults.out	results.out	/^int main() { return 10%2; }$/
+Mresults.out	results.out	/^int main() { return 3*6; }$/
+Mresults.out	results.out	/^int main() { return (5+3 * (7-(6\/3))) % 3; }$/
+Msolutions.out	solutions.out	/^int main() { return; }$/
+Msolutions.out	solutions.out	/^int main() { return 1+2;}$/
+Msolutions.out	solutions.out	/^int main() { return 5-3;}$/
+Msolutions.out	solutions.out	/^int main() { return 10\/2; }$/
+Msolutions.out	solutions.out	/^int main() { return 10%2; }$/
+Msolutions.out	solutions.out	/^int main() { return 3*6; }$/
+Msolutions.out	solutions.out	/^int main() { return (5+3 * (7-(6\/3))) % 3; }$/
+Mtests.in	tests.in	/^int main() { return; }$/
+Mtests.in	tests.in	/^int main() { return 1+2;}$/
+Mtests.in	tests.in	/^int main() { return 5-3;}$/
+Mtests.in	tests.in	/^int main() { return 10\/2; }$/
+Mtests.in	tests.in	/^int main() { return 10%2; }$/
+Mtests.in	tests.in	/^int main() { return 3*6; }$/
+Mtests.in	tests.in	/^int main() { return (5+3 * (7-(6\/3))) % 3; }$/
+NE_OP	C.tab.c	114
+NE_OP	C.tab.h	54
+NODE	nodes.h	7
+OBJS	Makefile	/^OBJS = lex.yy.o C.tab.o symbol_table.o nodes.o mai/
+REJECT	lex.yy.c	425
+RET	gentac.c	13
+RETURN	C.tab.c	127
+RETURN	C.tab.h	67
+SRCS	Makefile	/^SRCS = lex.yy.c C.tab.c symbol_table.c nodes.c mai/
+STRING_LITERAL	C.tab.c	110
+STRING_LITERAL	C.tab.h	50
+SUB	gentac.c	13
+TAC	gentac.c	19
+TAC	gentac.h	1
+TEST_MODE	token.h	6
+TOKEN	token.h	8
+TOKEN	token.h	14
+TRUE	token.h	4
+Uº	mycc	71
+VALUE	value.h	10
+VALUE_H	value.h	2
+VOID	C.tab.c	118
+VOID	C.tab.h	58
+WHILE	C.tab.c	124
+WHILE	C.tab.h	64
+YYABORT	C.tab.c	727
+YYACCEPT	C.tab.c	726
+YYBACKUP	C.tab.c	/^#define YYBACKUP(Token, Value)                    /
+YYBISON	C.tab.c	44
+YYBISON_VERSION	C.tab.c	47
+YYCASE_	C.tab.c	/^# define YYCASE_(N, S)                      \\$/
+YYCASE_	C.tab.c	1084
+YYCOPY	C.tab.c	/^#   define YYCOPY(Dst, Src, Count) \\$/
+YYCOPY	C.tab.c	/^#   define YYCOPY(Dst, Src, Count)              \\$/
+YYCOPY_NEEDED	C.tab.c	346
+YYDEBUG	C.tab.c	97
+YYDEBUG	C.tab.h	37
+YYDEBUG	C.y	4
+YYDPRINTF	C.tab.c	/^# define YYDPRINTF(Args)                        \\$/
+YYDPRINTF	C.tab.c	/^# define YYDPRINTF(Args)$/
+YYEMPTY	C.tab.c	723
+YYEOF	C.tab.c	724
+YYERRCODE	C.tab.c	752
+YYERROR	C.tab.c	728
+YYERROR_VERBOSE	C.tab.c	85
+YYERROR_VERBOSE	C.tab.c	86
+YYERROR_VERBOSE	C.tab.c	88
+YYERROR_VERBOSE_ARGS_MAXIMUM	C.tab.c	1003
+YYFINAL	C.tab.c	387
+YYFPRINTF	C.tab.c	761
+YYFREE	C.tab.c	317
+YYINITDEPTH	C.tab.c	888
+YYLAST	C.tab.c	389
+YYMALLOC	C.tab.c	311
+YYMAXDEPTH	C.tab.c	899
+YYMAXUTOK	C.tab.c	403
+YYNNTS	C.tab.c	394
+YYNRULES	C.tab.c	396
+YYNSTATES	C.tab.c	398
+YYNTOKENS	C.tab.c	392
+YYPACT_NINF	C.tab.c	498
+YYPOPSTACK	C.tab.c	/^#define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N/
+YYPULL	C.tab.c	59
+YYPURE	C.tab.c	53
+YYPUSH	C.tab.c	56
+YYRECOVERING	C.tab.c	/^#define YYRECOVERING()  (!!yyerrstatus)$/
+YYSIZE_MAXIMUM	C.tab.c	190
+YYSIZE_T	C.tab.c	179
+YYSIZE_T	C.tab.c	181
+YYSIZE_T	C.tab.c	184
+YYSIZE_T	C.tab.c	186
+YYSKELETON_NAME	C.tab.c	50
+YYSTACK_ALLOC	C.tab.c	265
+YYSTACK_ALLOC	C.tab.c	269
+YYSTACK_ALLOC	C.tab.c	274
+YYSTACK_ALLOC	C.tab.c	297
+YYSTACK_ALLOC_MAXIMUM	C.tab.c	294
+YYSTACK_ALLOC_MAXIMUM	C.tab.c	300
+YYSTACK_BYTES	C.tab.c	/^# define YYSTACK_BYTES(N) \\$/
+YYSTACK_FREE	C.tab.c	/^#  define YYSTACK_FREE(Ptr) do { \/* empty *\/; } wh/
+YYSTACK_FREE	C.tab.c	298
+YYSTACK_GAP_MAXIMUM	C.tab.c	338
+YYSTACK_RELOCATE	C.tab.c	/^# define YYSTACK_RELOCATE(Stack_alloc, Stack)     /
+YYSTACK_RELOCATE	C.tab.c	1272
+YYSTATE	lex.yy.c	86
+YYSTYPE	C.tab.c	133
+YYSTYPE	C.tab.h	73
+YYSTYPE	C.y	3
+YYSTYPE_IS_DECLARED	C.tab.c	135
+YYSTYPE_IS_DECLARED	C.tab.h	75
+YYSTYPE_IS_TRIVIAL	C.tab.c	134
+YYSTYPE_IS_TRIVIAL	C.tab.h	74
+YYSYNTAX_ERROR	C.tab.c	2104
+YYSYNTAX_ERROR	C.tab.c	2133
+YYTABLE_NINF	C.tab.c	503
+YYTERROR	C.tab.c	751
+YYTOKENTYPE	C.tab.c	105
+YYTOKENTYPE	C.tab.h	45
+YYTRANSLATE	C.tab.c	/^#define YYTRANSLATE(YYX)                          /
+YYUNDEFTOK	C.tab.c	402
+YYUSE	C.tab.c	/^# define YYUSE(E) ((void) (E))$/
+YYUSE	C.tab.c	/^# define YYUSE(E) \/* empty *\/$/
+YY_	C.tab.c	/^#   define YY_(Msgid) dgettext ("bison-runtime", M/
+YY_	C.tab.c	/^#  define YY_(Msgid) Msgid$/
+YY_ATTRIBUTE	C.tab.c	/^#  define YY_ATTRIBUTE(Spec) __attribute__(Spec)$/
+YY_ATTRIBUTE	C.tab.c	/^#  define YY_ATTRIBUTE(Spec) \/* empty *\/$/
+YY_ATTRIBUTE_PURE	C.tab.c	215
+YY_ATTRIBUTE_UNUSED	C.tab.c	219
+YY_AT_BOL	lex.yy.c	/^#define YY_AT_BOL() (yy_current_buffer->yy_at_bol)/
+YY_BREAK	lex.yy.c	584
+YY_BUFFER_EOF_PENDING	lex.yy.c	198
+YY_BUFFER_NEW	lex.yy.c	186
+YY_BUFFER_NORMAL	lex.yy.c	187
+YY_BUFFER_STATE	lex.yy.c	99
+YY_BUF_SIZE	lex.yy.c	97
+YY_CHAR	lex.yy.c	264
+YY_CURRENT_BUFFER	lex.yy.c	207
+YY_DECL	lex.yy.c	572
+YY_DO_BEFORE_ACTION	lex.yy.c	278
+YY_END_OF_BUFFER	lex.yy.c	286
+YY_END_OF_BUFFER_CHAR	lex.yy.c	94
+YY_EXIT_FAILURE	lex.yy.c	1652
+YY_FATAL_ERROR	lex.yy.c	/^#define YY_FATAL_ERROR(msg) yy_fatal_error( msg )$/
+YY_FLEX_MAJOR_VERSION	lex.yy.c	8
+YY_FLEX_MINOR_VERSION	lex.yy.c	9
+YY_FLUSH_BUFFER	lex.yy.c	236
+YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN	C.tab.c	240
+YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN	C.tab.c	250
+YY_IGNORE_MAYBE_UNINITIALIZED_END	C.tab.c	244
+YY_IGNORE_MAYBE_UNINITIALIZED_END	C.tab.c	251
+YY_INITIAL_VALUE	C.tab.c	/^# define YY_INITIAL_VALUE(Value) Value$/
+YY_INITIAL_VALUE	C.tab.c	/^# define YY_INITIAL_VALUE(Value) \/* Nothing. *\/$/
+YY_INPUT	lex.yy.c	/^#define YY_INPUT(buf,result,max_size) \\$/
+YY_LOCATION_PRINT	C.tab.c	/^# define YY_LOCATION_PRINT(File, Loc) ((void) 0)$/
+YY_MORE_ADJ	lex.yy.c	427
+YY_NEW_FILE	lex.yy.c	92
+YY_NO_POP_STATE	lex.yy.c	495
+YY_NO_PUSH_STATE	lex.yy.c	494
+YY_NO_TOP_STATE	lex.yy.c	496
+YY_NULL	lex.yy.c	66
+YY_NULLPTR	C.tab.c	77
+YY_NULLPTR	C.tab.c	79
+YY_NUM_RULES	lex.yy.c	285
+YY_PROTO	lex.yy.c	/^#define YY_PROTO(proto) proto$/
+YY_PROTO	lex.yy.c	/^#define YY_PROTO(proto) ()$/
+YY_READ_BUF_SIZE	lex.yy.c	516
+YY_REDUCE_PRINT	C.tab.c	/^# define YY_REDUCE_PRINT(Rule)          \\$/
+YY_REDUCE_PRINT	C.tab.c	/^# define YY_REDUCE_PRINT(Rule)$/
+YY_RESTORE_YY_MORE_OFFSET	lex.yy.c	428
+YY_RULE_SETUP	lex.yy.c	587
+YY_SC_TO_UI	lex.yy.c	/^#define YY_SC_TO_UI(c) ((unsigned int) (unsigned c/
+YY_STACK_PRINT	C.tab.c	/^# define YY_STACK_PRINT(Bottom, Top)              /
+YY_STACK_PRINT	C.tab.c	/^# define YY_STACK_PRINT(Bottom, Top)$/
+YY_START	lex.yy.c	85
+YY_START_STACK_INCR	lex.yy.c	560
+YY_STATE_EOF	lex.yy.c	/^#define YY_STATE_EOF(state) (YY_END_OF_BUFFER + st/
+YY_SYMBOL_PRINT	C.tab.c	/^# define YY_SYMBOL_PRINT(Title, Type, Value, Locat/
+YY_SYMBOL_PRINT	C.tab.c	/^# define YY_SYMBOL_PRINT(Title, Type, Value, Locat/
+YY_USER_ACTION	lex.yy.c	579
+YY_USE_CONST	lex.yy.c	31
+YY_USE_CONST	lex.yy.c	38
+YY_USE_CONST	lex.yy.c	48
+YY_USE_PROTOS	lex.yy.c	28
+YY_USE_PROTOS	lex.yy.c	37
+YY_USE_PROTOS	lex.yy.c	49
+YY_YY_C_TAB_H_INCLUDED	C.tab.c	94
+YY_YY_C_TAB_H_INCLUDED	C.tab.h	34
+_Noreturn	C.tab.c	225
+_Noreturn	C.tab.c	227
+__TOKEN_H	token.h	2
+__cplusplus	lex.yy.c	17
+abstract_declarator	C.y	178
+additive_expression	C.y	67
+all	Makefile	/^all:	mycc$/
+alloca	C.tab.c	272
+ans	C.y	6
+answer	test.sh	14
+argument_expression_list	C.y	38
+assignment_expression	C.y	95
+binding	frame.c	5
+bindings	frame.c	12
+boolean	value.h	7
+check	leak_check.sh	3
+clean	Makefile	/^clean:$/
+compound_statement	C.y	200
+create_tac	gentac.c	/^TAC* create_tac() {$/
+create_value	value.c	/^VALUE* create_value(void) {$/
+declaration	C.y	106
+declaration_list	C.y	207
+declaration_specifiers	C.y	113
+declarator	C.y	142
+depend	Makefile	/^depend:	$/
+direct_abstract_declarator	C.y	184
+direct_declarator	C.y	147
+dist	Makefile	/^dist:	symbol_table.c nodes.c main.c Makefile C.fle/
+dst	gentac.c	17
+equality_expression	C.y	87
+expression	C.y	101
+expression_statement	C.y	217
+external_declaration	C.y	245
+f	mycc	92
+frame	frame.c	11
+frame_assign	frame.c	/^VALUE* frame_assign(TOKEN* x, FRAME* frame, VALUE*/
+frame_check	frame.c	/^VALUE* frame_check(TOKEN* x, FRAME* frame) {$/
+frame_create	frame.c	/^FRAME* frame_create(void) {$/
+frame_declaration	frame.c	/^VALUE* frame_declaration(TOKEN* x, FRAME* frame) {/
+function_definition	C.y	250
+function_token	symbol_table.c	19
+gen_tac	gentac.c	/^void gen_tac(NODE* term) {$/
+gen_tac_return	gentac.c	/^void gen_tac_return(NODE* term) {$/
+goal	C.y	21
+hash	symbol_table.c	/^int hash(char *s)$/
+identifier_list	C.y	171
+init_declarator	C.y	126
+init_declarator_list	C.y	121
+init_symbtable	symbol_table.c	/^void init_symbtable(void)$/
+int_token	symbol_table.c	19
+integer	value.h	6
+interpret	interpret.c	/^VALUE* interpret(NODE* term, FRAME* frame) {$/
+interpret_add	interpret.c	/^static VALUE* interpret_add(NODE* term, FRAME* fra/
+interpret_assign	interpret.c	/^static VALUE* interpret_assign(NODE* term, FRAME* /
+interpret_div	interpret.c	/^static VALUE* interpret_div(NODE* term, FRAME* fra/
+interpret_equality	interpret.c	/^static VALUE* interpret_equality(NODE* term, FRAME/
+interpret_greater	interpret.c	/^static VALUE* interpret_greater(NODE* term, FRAME*/
+interpret_if	interpret.c	/^static VALUE* interpret_if(NODE* term, FRAME* fram/
+interpret_inequality	interpret.c	/^static VALUE* interpret_inequality(NODE* term, FRA/
+interpret_leaf	interpret.c	/^static VALUE* interpret_leaf(NODE* term, FRAME* fr/
+interpret_lesser	interpret.c	/^static VALUE* interpret_lesser(NODE* term, FRAME* /
+interpret_maths	interpret.c	/^static VALUE* interpret_maths(NODE* term, FRAME* f/
+interpret_mod	interpret.c	/^static VALUE* interpret_mod(NODE* term, FRAME* fra/
+interpret_mul	interpret.c	/^static VALUE* interpret_mul(NODE* term, FRAME* fra/
+interpret_sub	interpret.c	/^static VALUE* interpret_sub(NODE* term, FRAME* fra/
+is_equal	interpret.c	/^static bool is_equal(VALUE* v1, VALUE* v2) {$/
+iteration_statement	C.y	229
+jump_statement	C.y	233
+lasttok	C.flex	41
+left	nodes.h	5
+lex.yy.c	Makefile	/^lex.yy.c: C.flex$/
+lexeme	token.h	11
+lookup_token	symbol_table.c	/^TOKEN* lookup_token(char *s)$/
+make_leaf	nodes.c	/^NODE* make_leaf(TOKEN* l)$/
+make_node	nodes.c	/^NODE* make_node(int t, NODE* left, NODE* right)$/
+multiplicative_expression	C.y	57
+mycc	Makefile	/^mycc:	${OBJS}$/
+name	frame.c	6
+named	main.c	/^char *named(int t) {$/
+next	frame.c	8
+next	frame.c	13
+next	gentac.c	18
+next	token.h	13
+node	nodes.h	3
+op	gentac.c	16
+ops	gentac.c	13
+parameter_declaration	C.y	165
+parameter_list	C.y	160
+pointer	C.y	155
+postfix_expression	C.y	31
+primary_expression	C.y	24
+print_leaf	main.c	/^void print_leaf(NODE *tree, int level) {$/
+print_tac	gentac.c	/^void print_tac(TAC* tac) {$/
+print_tree	main.c	/^void print_tree(NODE *tree) {$/
+print_tree0	main.c	/^void print_tree0(NODE *tree, int level) {$/
+print_value	value.c	/^void print_value(VALUE* val) {$/
+rX	C.tab.o	66
+rX	C.tab.o	66
+rX	C.tab.o	66
+rX	C.tab.o	66
+reduce	C.output	/^    FUNCTION    reduce using rule 38 (declaration)/
+reduce	C.output	/^    FUNCTION    reduce using rule 55 (direct_decla/
+relational_expression	C.y	75
+right	nodes.h	6
+sX	C.tab.o	66
+sX	C.tab.o	66
+sX›æsX	C.tab.o	66
+selection_statement	C.y	222
+shift	C.output	/^    FUNCTION    shift, and go to state 6$/
+shift	C.output	/^    FUNCTION  shift, and go to state 6$/
+shift	C.output	/^    FUNCTION  shift, and go to state 6$/
+shift	C.output	/^    FUNCTION    shift, and go to state 6$/
+shift	C.output	/^    FUNCTION    shift, and go to state 6$/
+shift	C.output	/^    FUNCTION    shift, and go to state 6$/
+shift	C.output	/^    FUNCTION        shift, and go to state 6$/
+shift	C.output	/^    FUNCTION    shift, and go to state 6$/
+shift	C.output	/^    FUNCTION    shift, and go to state 6$/
+shift	C.output	/^    FUNCTION    shift, and go to state 6$/
+shift	C.output	/^    FUNCTION        shift, and go to state 6$/
+shift	C.output	/^    FUNCTION    shift, and go to state 6$/
+shift	C.output	/^    FUNCTION  shift, and go to state 6$/
+shift	C.output	/^    FUNCTION  shift, and go to state 6$/
+short	C.tab.c	150
+src1	gentac.c	17
+src2	gentac.c	17
+statement	C.y	192
+statement_list	C.y	212
+storage_class_specifier	C.y	131
+string	value.h	8
+symbtable	symbol_table.c	17
+tå	frame.o	12
+tX	C.tab.o	66
+tX	C.tab.o	66
+tX	C.tab.o	66
+tX	C.tab.o	66
+tX	C.tab.o	66
+tX	C.tab.o	66
+tX	C.tab.o	66
+tX	C.tab.o	66
+tX	C.tab.o	66
+tX	C.tab.o	66
+tX	C.tab.o	66
+tX	C.tab.o	66
+tX	C.tab.o	66
+tXõ	C.tab.o	66
+tac	gentac.c	15
+translation_unit	C.y	240
+type	nodes.h	4
+type	token.h	10
+type	value.h	4
+type_specifier	C.y	136
+uX	C.tab.o	66
+uX†ûtX‹	C.tab.o	66
+unary_expression	C.y	44
+unary_operator	C.y	49
+unput	lex.yy.c	/^#define unput(c) yyunput( c, yytext_ptr )$/
+v	value.h	9
+val	frame.c	7
+value	token.h	12
+value	value.h	3
+void_token	symbol_table.c	19
+yy_accept	lex.yy.c	287
+yy_at_bol	lex.yy.c	178
+yy_base	lex.yy.c	343
+yy_buf_pos	lex.yy.c	149
+yy_buf_size	lex.yy.c	154
+yy_buffer_state	lex.yy.c	144
+yy_buffer_status	lex.yy.c	185
+yy_c_buf_p	lex.yy.c	219
+yy_ch_buf	lex.yy.c	148
+yy_chk	lex.yy.c	396
+yy_create_buffer	lex.yy.c	/^YY_BUFFER_STATE yy_create_buffer( FILE *file, int /
+yy_current_buffer	lex.yy.c	201
+yy_def	lex.yy.c	358
+yy_delete_buffer	lex.yy.c	/^void yy_delete_buffer( YY_BUFFER_STATE b )$/
+yy_did_buffer_switch_on_eof	lex.yy.c	226
+yy_ec	lex.yy.c	302
+yy_fatal_error	lex.yy.c	/^static void yy_fatal_error( yyconst char msg[] )$/
+yy_fill_buffer	lex.yy.c	183
+yy_flex_alloc	lex.yy.c	/^static void *yy_flex_alloc( yy_size_t size )$/
+yy_flex_free	lex.yy.c	/^static void yy_flex_free( void *ptr )$/
+yy_flex_realloc	lex.yy.c	/^static void *yy_flex_realloc( void *ptr, yy_size_t/
+yy_flex_strlen	lex.yy.c	/^static int yy_flex_strlen( yyconst char *s )$/
+yy_flex_strncpy	lex.yy.c	/^static void yy_flex_strncpy( char *s1, yyconst cha/
+yy_flush_buffer	lex.yy.c	/^void yy_flush_buffer( YY_BUFFER_STATE b )$/
+yy_get_next_buffer	lex.yy.c	/^static int yy_get_next_buffer()$/
+yy_get_previous_state	lex.yy.c	/^static yy_state_type yy_get_previous_state()$/
+yy_hold_char	lex.yy.c	211
+yy_init	lex.yy.c	220
+yy_init_buffer	lex.yy.c	/^void yy_init_buffer( YY_BUFFER_STATE b, FILE *file/
+yy_input_file	lex.yy.c	146
+yy_is_interactive	lex.yy.c	172
+yy_is_our_buffer	lex.yy.c	165
+yy_last_accepting_cpos	lex.yy.c	420
+yy_last_accepting_state	lex.yy.c	419
+yy_load_buffer_state	lex.yy.c	/^void yy_load_buffer_state( void )$/
+yy_meta	lex.yy.c	334
+yy_n_chars	lex.yy.c	159
+yy_n_chars	lex.yy.c	213
+yy_new_buffer	lex.yy.c	246
+yy_nxt	lex.yy.c	373
+yy_pop_state	lex.yy.c	/^static void yy_pop_state()$/
+yy_push_state	lex.yy.c	/^static void yy_push_state( int new_state )$/
+yy_reduce_print	C.tab.c	/^yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyv/
+yy_scan_buffer	lex.yy.c	/^YY_BUFFER_STATE yy_scan_buffer( char *base, yy_siz/
+yy_scan_bytes	lex.yy.c	/^YY_BUFFER_STATE yy_scan_bytes( yyconst char *bytes/
+yy_scan_string	lex.yy.c	/^YY_BUFFER_STATE yy_scan_string( yyconst char *yy_s/
+yy_set_bol	lex.yy.c	/^#define yy_set_bol(at_bol) \\$/
+yy_set_interactive	lex.yy.c	/^#define yy_set_interactive(is_interactive) \\$/
+yy_size_t	lex.yy.c	141
+yy_stack_print	C.tab.c	/^yy_stack_print (yytype_int16 *yybottom, yytype_int/
+yy_start	lex.yy.c	221
+yy_start_stack	lex.yy.c	482
+yy_start_stack_depth	lex.yy.c	481
+yy_start_stack_ptr	lex.yy.c	480
+yy_state_type	lex.yy.c	266
+yy_switch_to_buffer	lex.yy.c	/^void yy_switch_to_buffer( YY_BUFFER_STATE new_buff/
+yy_symbol_print	C.tab.c	/^yy_symbol_print (FILE *yyoutput, int yytype, YYSTY/
+yy_symbol_value_print	C.tab.c	/^yy_symbol_value_print (FILE *yyoutput, int yytype,/
+yy_top_state	lex.yy.c	/^static int yy_top_state()$/
+yy_try_NUL_trans	lex.yy.c	/^static yy_state_type yy_try_NUL_trans( yy_state_ty/
+yyalloc	C.tab.c	331
+yychar	C.tab.c	1146
+yycheck	C.tab.c	621
+yyclearin	C.tab.c	722
+yyconst	lex.yy.c	53
+yyconst	lex.yy.c	55
+yydebug	C.tab.c	877
+yydefact	C.tab.c	535
+yydefgoto	C.tab.c	567
+yydestruct	C.tab.c	/^yydestruct (const char *yymsg, int yytype, YYSTYPE/
+yyerrok	C.tab.c	721
+yyerror	C.y	/^int yyerror(char *s)$/
+yyin	lex.yy.c	265
+yyinput	lex.yy.c	/^static int yyinput()$/
+yyleng	lex.yy.c	216
+yyless	lex.yy.c	/^#define yyless(n) \\$/
+yyless	lex.yy.c	1670
+yyless	lex.yy.c	/^#define yyless(n) \\$/
+yylval	C.tab.c	1149
+yymore	lex.yy.c	/^#define yymore() yymore_used_but_not_detected$/
+yynerrs	C.tab.c	1151
+yypact	C.tab.c	510
+yypact_value_is_default	C.tab.c	/^#define yypact_value_is_default(Yystate) \\$/
+yyparse	C.tab.c	/^yyparse (void)$/
+yypgoto	C.tab.c	558
+yyr1	C.tab.c	689
+yyr2	C.tab.c	705
+yyrestart	lex.yy.c	/^void yyrestart( FILE *input_file )$/
+yyrline	C.tab.c	444
+yyss_alloc	C.tab.c	333
+yystos	C.tab.c	666
+yystpcpy	C.tab.c	923
+yystpcpy	C.tab.c	/^yystpcpy (char *yydest, const char *yysrc)$/
+yystrlen	C.tab.c	907
+yystrlen	C.tab.c	/^yystrlen (const char *yystr)$/
+yysyntax_error	C.tab.c	/^yysyntax_error (YYSIZE_T *yymsg_alloc, char **yyms/
+yytable	C.tab.c	578
+yytable_value_is_error	C.tab.c	/^#define yytable_value_is_error(Yytable_value) \\$/
+yyterminate	lex.yy.c	/^#define yyterminate() return YY_NULL$/
+yytext	lex.yy.c	429
+yytext_ptr	lex.yy.c	268
+yytname	C.tab.c	463
+yytnamerr	C.tab.c	/^yytnamerr (char *yyres, const char *yystr)$/
+yytokentype	C.tab.c	106
+yytokentype	C.tab.h	46
+yytoknum	C.tab.c	489
+yytranslate	C.tab.c	410
+yytype_int16	C.tab.c	172
+yytype_int16	C.tab.c	174
+yytype_int8	C.tab.c	160
+yytype_int8	C.tab.c	162
+yytype_uint16	C.tab.c	166
+yytype_uint16	C.tab.c	168
+yytype_uint8	C.tab.c	154
+yytype_uint8	C.tab.c	156
+yyunput	lex.yy.c	/^static void yyunput( int c, register char *yy_bp )/
+yyvs_alloc	C.tab.c	334

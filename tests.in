@@ -1,0 +1,7 @@
+int main() { return; }
+int main() { return 1+2;}
+int main() { return 5-3;}
+int main() { return 10/2; }
+int main() { return 10%2; }
+int main() { return 3*6; }
+int main() { return (5+3 * (7-(6/3))) % 3; }
