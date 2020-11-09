@@ -111,6 +111,9 @@ extern void print_value(VALUE*);
 extern TAC* run_gen_tac(NODE*, FRAME*);
 extern void print_tac_program(TAC*);
 
+//mips.h externs
+extern void compile(TAC*, char*);
+
 //other externs
 extern int yydebug;
 extern int yyparse(void);
@@ -135,6 +138,9 @@ void call_gentac(NODE* tree) {
 }
 
 void call_compiler(NODE* tree) {
+    FRAME* frame = frame_create();
+    TAC* result = run_gen_tac(tree, frame);
+    compile(result, "a.asm");
     return;
 }
 

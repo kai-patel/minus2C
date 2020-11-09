@@ -12,8 +12,6 @@ extern VALUE* frame_check(TOKEN*, FRAME*);
 extern VALUE* frame_assign(TOKEN*, FRAME*, VALUE*);
 extern VALUE* frame_name(TOKEN*, FRAME*);
 
-enum ops {ADD, SUB, MUL, DIV, MOD, CALL_ENUM, RET, STORE, GREATER, LESSER};
-
 char* named_ops(int i) {
     //printf("Called named ops with i: %d\n", i);
     switch(i) {
@@ -41,12 +39,6 @@ char* named_ops(int i) {
             return "???";
     }
 }
-
-typedef struct tac {
-    enum ops op;
-    TOKEN* src1, *src2, *dst;
-    TAC* next;
-} TAC;
 
 typedef struct block {
     int nvars;

@@ -4,7 +4,15 @@
 
 #ifndef GENTAC_H
 #define GENTAC_H
+enum ops {ADD, SUB, MUL, DIV, MOD, CALL_ENUM, RET, STORE, GREATER, LESSER};
+
 typedef struct tac TAC;
+
+typedef struct tac {
+    enum ops op;
+    TOKEN* src1, *src2, *dst;
+    TAC* next;
+} TAC;
 
 typedef struct block BLOCK;
 
@@ -28,7 +36,7 @@ static TAC* leaf_to_token(NODE*, FRAME*);
 
 static TAC* gen_tac_return(NODE*, FRAME*);
 
-void print_tac(TAC*);
+extern void print_tac(TAC*);
 
 static TAC* gen_tac_punct(NODE*, FRAME*);
 
