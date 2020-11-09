@@ -4,6 +4,8 @@
 #define MIPS_H
 extern void compile(TAC*, char*);
 
+static char* sprint_reg(TOKEN*);
+
 static void handle(TAC*);
 
 static void handle_assign(TAC*);

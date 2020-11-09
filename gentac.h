@@ -22,7 +22,7 @@ typedef struct bb BB;
 
 TAC* gen_tac(NODE*, FRAME*);
 
-static TOKEN* get_reg(char);
+extern TOKEN* get_reg(char);
 
 static void add_tac(TAC*);
 

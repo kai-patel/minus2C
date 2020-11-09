@@ -2,12 +2,22 @@
 #include "gentac.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 extern FRAME* frame_create();
 
 extern void print_tac(TAC*);
+extern TOKEN* get_reg(char);
 
 static FILE* file;
+
+char* sprint_reg(TOKEN* tok) {
+    char* reg = malloc(3*sizeof(char));
+    if(tok->type == 't') sprintf(reg, "t%d", tok->value);
+    if(tok->type == 'a') sprintf(reg, "a%d", tok->value);
+    reg[2] = '\0';
+    return reg;
+}
 
 void handle(TAC* tac) {
     switch(tac->op) {
@@ -47,10 +57,6 @@ void handle(TAC* tac) {
     }
 }
 
-char* get_cpu_reg() {
-    return "$1";
-}
-
 void handle_assign(TAC* tac) {
     return;
 }
@@ -59,12 +65,12 @@ void handle_add(TAC* tac) {
     int arg1 = tac->src1->value;
     int arg2 = tac->src2->value;
 
-    char* reg1 = get_cpu_reg();
-    char* reg2 = get_cpu_reg();
+    char* reg1 = sprint_reg(get_reg('t'));
+    char* reg2 = sprint_reg(get_reg('t'));
 
     fprintf(file, "li %s %d\n", reg1, arg1);
     fprintf(file, "li %s %d\n", reg2, arg2);
-    fprintf(file, "add %s %s %s\n", get_cpu_reg(), reg1, reg2);
+    fprintf(file, "add %s %s %s\n", sprint_reg(tac->dst), reg1, reg2);
     return;
 }
 

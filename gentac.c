@@ -49,8 +49,8 @@ typedef struct call {
     int arity;
 } CALL;
 
-static int latest_t = -1;
-static int latest_a = -1;
+int latest_t = -1;
+int latest_a = -1;
 
 TOKEN* get_reg(char type) {
     TOKEN* t = new_token(type);
