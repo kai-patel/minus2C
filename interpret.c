@@ -225,3 +225,11 @@ VALUE* interpret(NODE* term, FRAME* frame) {
             }
     }
 }
+
+void cleanup_interpret(NODE* tree, FRAME* frame) {
+    //free(frame);
+    if(tree == NULL) return;
+    //cleanup_interpret(tree->left, NULL);
+    //cleanup_interpret(tree->right, NULL);
+    //free(tree);
+}

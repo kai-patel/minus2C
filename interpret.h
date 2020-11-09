@@ -28,4 +28,6 @@ static VALUE* interpret_lesser(NODE*, FRAME*);
 static VALUE* interpret_if(NODE*, FRAME*);
 
 static VALUE* interpret_assign(NODE*, FRAME*);
+
+extern void cleanup_interpret(NODE*, FRAME*);
 #endif

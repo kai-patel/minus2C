@@ -301,3 +301,13 @@ TAC* run_gen_tac(NODE* term, FRAME* frame) {
     gen_tac(term, frame);
     return head;
 }
+
+void cleanup_gen_tac(TAC* head) {
+    TAC* tmp;
+    while (head != NULL) {
+        tmp = head;
+        head = head->next;
+        free(tmp);
+    }
+
+}

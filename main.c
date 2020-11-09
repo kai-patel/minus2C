@@ -97,6 +97,7 @@ void print_tree(NODE *tree) {
 
 //interpret.h externs
 extern VALUE* interpret(NODE*, FRAME*);
+extern void cleanup_interpret(NODE*, FRAME*);
 
 //frame.h externs
 extern VALUE* frame_check(TOKEN* x, FRAME* frame);
@@ -110,6 +111,7 @@ extern void print_value(VALUE*);
 //gentac.h externs
 extern TAC* run_gen_tac(NODE*, FRAME*);
 extern void print_tac_program(TAC*);
+extern void cleanup_gen_tac(TAC*);
 
 //mips.h externs
 extern void compile(TAC*, char*);
@@ -127,6 +129,7 @@ void call_interpreter(NODE* tree) {
     VALUE* result = interpret(tree, frame);
     print_value(result);
     puts(" ");
+    cleanup_interpret(tree, frame);
     return;
 }
 
@@ -134,6 +137,7 @@ void call_gentac(NODE* tree) {
     FRAME* frame = frame_create();
     TAC* result = run_gen_tac(tree, frame);
     print_tac_program(result);
+    cleanup_gen_tac(result);
     return;
 }
 
