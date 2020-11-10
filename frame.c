@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+extern VALUE* interpret(NODE*, FRAME*);
+
 typedef struct binding {
     TOKEN* name;
     VALUE* val;
@@ -56,8 +58,26 @@ VALUE* frame_declaration(TOKEN* x, FRAME* frame) {
     fprintf(stderr, "binding allocation failed\n");
 }
 
+FRAME* frame_extend(FRAME* frame, NODE* ids, NODE* args) {
+    FRAME* new_frame = frame_create();
+    BINDING* bindings = NULL;
+    for(NODE* ip = ids, *ap = args; (ip !=NULL) && (ap != NULL); ip = ip->right, ap = ap->right) {
+        bindings = make_binding(ip->left, interpret(ap->left, frame), bindings);
+    }
+    new_frame->bindings = bindings;
+    return new_frame;
+}
+
 FRAME* frame_create(void) {
     FRAME* frame = malloc(sizeof(FRAME));
     frame->bindings = NULL;
     frame->next = NULL;
+}
+
+BINDING* make_binding(NODE* tok, VALUE* val, BINDING* bindings) {
+    BINDING* new_binding = malloc(sizeof(BINDING));
+    new_binding->name = (TOKEN*) tok;
+    new_binding->val = val;
+    new_binding->next = bindings;
+    return new_binding;
 }

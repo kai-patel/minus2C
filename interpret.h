@@ -1,8 +1,9 @@
-#include "value.h"
-#include "frame.h"
-
 #ifndef INTERPRET_H
 #define INTERPRET_H
+#include "frame.h"
+#include "value.h"
+#include "closure.h"
+
 VALUE* interpret(NODE*, FRAME*);
 
 static VALUE* interpret_punct(NODE*, FRAME*);
