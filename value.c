@@ -24,6 +24,7 @@ void print_value(VALUE* val) {
     } else if(val->type == IDENTIFIER) {
         printf("%s", val->v.string);
     } else {
+        printf("Closure");
         //printf("%d not implemented yet", (val->type));
         return;
     }

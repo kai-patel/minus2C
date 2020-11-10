@@ -1,13 +1,17 @@
-#include "nodes.h"
-#include "value.h"
-#include "token.h"
-#include "interpret.h"
 
 #ifndef FRAME_H
 #define FRAME_H
+
+#include "nodes.h"
+#include "value.h"
+#include "token.h"
+
 typedef struct binding BINDING;
 
-typedef struct frame FRAME;
+typedef struct frame {
+    BINDING* bindings;
+    struct frame* next;
+} FRAME;
 
 extern FRAME* frame_create();
 

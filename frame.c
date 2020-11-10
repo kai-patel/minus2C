@@ -1,4 +1,5 @@
 #include "frame.h"
+#include "interpret.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -9,11 +10,6 @@ typedef struct binding {
     VALUE* val;
     BINDING* next;
 } BINDING;
-
-typedef struct frame {
-    BINDING* bindings;
-    FRAME* next;
-} FRAME;
 
 VALUE* frame_check(TOKEN* x, FRAME* frame) {
     while(frame != NULL) {

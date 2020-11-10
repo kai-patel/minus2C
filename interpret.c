@@ -1,12 +1,9 @@
 #include <stdio.h>
 #include <ctype.h>
-#include "nodes.h"
-#include "C.tab.h"
-
 #include <stdlib.h>
 #include <stdbool.h>
+
 #include "interpret.h"
-#include "frame.h"
 
 extern char* named(int);
 extern VALUE* create_value(void);
@@ -15,7 +12,11 @@ extern void print_leaf(NODE*, int);
 
 extern VALUE* frame_check(TOKEN*, FRAME*);
 extern VALUE* frame_assign(TOKEN*, FRAME*, VALUE*);
-extern VALUE* frame_name(TOKEN*, FRAME*);
+extern FRAME* frame_extend(FRAME*, NODE*, NODE*);
+
+static NODE* formals(CLOSURE* f) {
+    return NULL;
+}
 
 static bool is_equal(VALUE* v1, VALUE* v2) {
     if(v1->type != v2->type) {
@@ -178,6 +179,7 @@ static VALUE* interpret_punct(NODE* term, FRAME* frame) {
         case '=':
             return interpret_assign(term, frame);
         case '~':
+            interpret(term->left, frame);
             return interpret(term->right, frame);
         case ';':
             interpret(term->left, frame);
@@ -198,6 +200,49 @@ static VALUE* interpret_if(NODE* term, FRAME* frame) {
     return NULL;
 }
 
+static VALUE* interpret_declaration(NODE* term, FRAME* frame) {
+    NODE* d = term->left;
+    NODE* code = term->right;
+
+    NODE* type = d->left;
+    NODE* F = d->right;
+
+    TOKEN* t = (TOKEN*) F->left;
+    NODE* formals = F->right;
+
+
+    VALUE* bound = frame_check(t, frame);
+    if(bound != NULL) {
+        printf("ERROR: FUNCTION ALREADY DEFINED\n");
+        exit(-1);
+    } else {
+        VALUE* val = create_value();
+        CLOSURE* f = malloc(sizeof(CLOSURE));
+
+        f->name = t;
+        f->formals = formals;
+        f->frame = frame;
+        f->code = code;
+        frame_declaration(t, frame);
+        frame_assign(t, frame, val);
+        return val;
+    }
+
+    return NULL;
+}
+
+static VALUE* lexical_call(TOKEN* name, NODE* args, FRAME* frame) {
+    VALUE* val  = frame_check(name, frame);
+    print_value(val);
+    CLOSURE* f = val->v.f;
+#if 1
+    FRAME* new_frame = frame_extend(frame, f->formals, args);
+    new_frame->next = f->frame;
+    return interpret(f->code, new_frame);
+#endif
+    return NULL;
+}
+
 VALUE* interpret(NODE* term, FRAME* frame) {
     if(term == NULL) return NULL;
     switch(term->type) {
@@ -213,12 +258,15 @@ VALUE* interpret(NODE* term, FRAME* frame) {
             return (VALUE*) interpret_inequality(term, frame);
         case IF:
             return (VALUE*) interpret_if(term, frame);
+        case APPLY:
+            return lexical_call((TOKEN*) term->left->left->left, term->right, frame);
         default:
             if(ispunct(term->type)) {
                 return (VALUE*) interpret_punct(term, frame);
             } else {
                 //printf("%s was passed over (not yet implemented)\n", named(term->type));
                 if(term->type == '~') return interpret_punct(term, frame);
+                if(term->type == 'D') return interpret_declaration(term, frame);
                 interpret(term->left, frame);
                 interpret(term->right, frame);
                 break;

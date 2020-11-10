@@ -1,8 +1,14 @@
 #ifndef INTERPRET_H
 #define INTERPRET_H
-#include "frame.h"
+
+#include "nodes.h"
+#include "C.tab.h"
 #include "value.h"
-#include "closure.h"
+#include "frame.h"
+
+//TOKEN* TRUE = make_symbol(" TRUE ");
+//TOKEN* FALSE = make_symbol(" FALSE ");
+
 
 VALUE* interpret(NODE*, FRAME*);
 
@@ -29,6 +35,8 @@ static VALUE* interpret_lesser(NODE*, FRAME*);
 static VALUE* interpret_if(NODE*, FRAME*);
 
 static VALUE* interpret_assign(NODE*, FRAME*);
+
+static VALUE* lexical_call(TOKEN*, NODE*, FRAME*);
 
 extern void cleanup_interpret(NODE*, FRAME*);
 #endif

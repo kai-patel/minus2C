@@ -10,7 +10,6 @@ extern char* named(int);
 
 extern VALUE* frame_check(TOKEN*, FRAME*);
 extern VALUE* frame_assign(TOKEN*, FRAME*, VALUE*);
-extern VALUE* frame_name(TOKEN*, FRAME*);
 
 char* named_ops(int i) {
     //printf("Called named ops with i: %d\n", i);
@@ -40,14 +39,6 @@ char* named_ops(int i) {
     }
 }
 
-typedef struct block {
-    int nvars;
-} BLOCK;
-
-typedef struct call {
-    TOKEN* name;
-    int arity;
-} CALL;
 
 int latest_t = -1;
 int latest_a = -1;
@@ -64,6 +55,7 @@ TOKEN* get_reg(char type) {
 TAC* create_tac(void) {
     TAC* tac = malloc(sizeof(TAC));
     tac->op = 0;
+    //tac->args= NULL;
     tac->src1 = NULL;
     tac->src2 = NULL;
     tac->dst = NULL;

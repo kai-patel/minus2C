@@ -1,3 +1,7 @@
+void hello() {
+    return x;
+}
+
 int main() {
-    return ((50 * 2) / 4);
+    return hello();
 }

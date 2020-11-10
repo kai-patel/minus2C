@@ -8,8 +8,18 @@ enum ops {ADD, SUB, MUL, DIV, MOD, CALL_ENUM, RET, STORE, GREATER, LESSER};
 
 typedef struct tac TAC;
 
+typedef struct block {
+    int nvars;
+} BLOCK;
+
+typedef struct call {
+    TOKEN* name;
+    int arity;
+} CALL;
+
 typedef struct tac {
     enum ops op;
+    union { BLOCK block; CALL call; } args;
     TOKEN* src1, *src2, *dst;
     TAC* next;
 } TAC;

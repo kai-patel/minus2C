@@ -1,7 +1,8 @@
-#include "token.h"
-
 #ifndef NODES_H
 #define NODES_H
+
+#include "token.h"
+
 typedef struct node {
   int          type;
   struct node *left;
