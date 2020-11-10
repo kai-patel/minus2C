@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "interpret.h"
 
@@ -207,8 +208,13 @@ static VALUE* interpret_declaration(NODE* term, FRAME* frame) {
     NODE* type = d->left;
     NODE* F = d->right;
 
-    TOKEN* t = (TOKEN*) F->left;
+    TOKEN* t = (TOKEN*) F->left->left;
     NODE* formals = F->right;
+    printf("%s\n", t->lexeme);
+    if(strcmp(t->lexeme, "main") == 0) {
+        puts("Found main");
+        return interpret(code, frame);
+    }
 
 
     VALUE* bound = frame_check(t, frame);
@@ -232,15 +238,15 @@ static VALUE* interpret_declaration(NODE* term, FRAME* frame) {
 }
 
 static VALUE* lexical_call(TOKEN* name, NODE* args, FRAME* frame) {
+    puts("Calling a function!");
     VALUE* val  = frame_check(name, frame);
-    print_value(val);
     CLOSURE* f = val->v.f;
-#if 1
+    printf("%s\n", f->name->lexeme);
     FRAME* new_frame = frame_extend(frame, f->formals, args);
     new_frame->next = f->frame;
+    print_value(interpret(f->code, new_frame));
+    puts(" ");
     return interpret(f->code, new_frame);
-#endif
-    return NULL;
 }
 
 VALUE* interpret(NODE* term, FRAME* frame) {

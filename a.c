@@ -1,7 +1,8 @@
 void hello() {
-    return x;
+    return 5;
 }
 
 int main() {
-    return hello();
+    hello();
+    return 0;
 }
