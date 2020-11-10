@@ -14,7 +14,7 @@ VALUE* create_value(void) {
 
 void print_value(VALUE* val) {
     if(val == NULL) {
-        printf(" ");
+        printf("NULL value");
         return;
     }
     if(val->type == CONSTANT) {
@@ -24,7 +24,7 @@ void print_value(VALUE* val) {
     } else if(val->type == IDENTIFIER) {
         printf("%s", val->v.string);
     } else {
-        printf("Closure");
+        printf("Closure \"%p\"", val->v.f);
         //printf("%d not implemented yet", (val->type));
         return;
     }

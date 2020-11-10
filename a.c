@@ -1,8 +1,7 @@
 void hello() {
-    return 5;
+    return (50 * 2) / 4;
 }
 
 int main() {
-    hello();
-    return 0;
+    return hello();
 }
