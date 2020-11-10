@@ -144,7 +144,7 @@ void call_gentac(NODE* tree) {
 void call_compiler(NODE* tree) {
     FRAME* frame = frame_create();
     TAC* result = run_gen_tac(tree, frame);
-    compile(result, "a.asm");
+    compile(result, "a.s");
     return;
 }
 

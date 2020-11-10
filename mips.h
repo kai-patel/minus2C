@@ -6,9 +6,13 @@ extern void compile(TAC*, char*);
 
 static char* sprint_reg(TOKEN*);
 
+static int is_reg(TOKEN*);
+
 static void handle(TAC*);
 
 static void handle_assign(TAC*);
+
+static void handle_maths(TAC*);
 
 static void handle_add(TAC*);
 
@@ -27,6 +31,4 @@ static void handle_ret(TAC*);
 static void handle_greater(TAC*);
 
 static void handle_lesser(TAC*);
-
-static char* get_cpu_reg();
 #endif

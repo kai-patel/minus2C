@@ -1,5 +1,3 @@
 int main() {
-    { int x; }
-    { x = 0 + 4; }
-    return x;
+    return ((50 * 2) / 4);
 }

@@ -19,6 +19,13 @@ char* sprint_reg(TOKEN* tok) {
     return reg;
 }
 
+int is_reg(TOKEN* t) {
+    if(t->type == 't' || t->type == 'a') {
+        return 1;
+    }
+    return 0;
+}
+
 void handle(TAC* tac) {
     switch(tac->op) {
         case ADD:
@@ -68,25 +75,110 @@ void handle_add(TAC* tac) {
     char* reg1 = sprint_reg(get_reg('t'));
     char* reg2 = sprint_reg(get_reg('t'));
 
-    fprintf(file, "li %s %d\n", reg1, arg1);
-    fprintf(file, "li %s %d\n", reg2, arg2);
-    fprintf(file, "add %s %s %s\n", sprint_reg(tac->dst), reg1, reg2);
+    if(is_reg(tac->src1)) {
+        fprintf(file, "\tmove $%s, $%s\n", reg1, sprint_reg(tac->src1));
+    } else {
+        fprintf(file, "\tli $%s, %d\n", reg1, arg1);
+    }
+
+    if(is_reg(tac->src2)) {
+        fprintf(file, "\tmove $%s, $%s\n", reg2, sprint_reg(tac->src2));
+    } else {
+        fprintf(file, "\tli $%s, %d\n", reg2, arg2);
+    }
+
+    fprintf(file, "\tadd $%s, $%s, $%s\n", sprint_reg(tac->dst), reg1, reg2);
     return;
 }
 
 void handle_sub(TAC* tac) {
+    int arg1 = tac->src1->value;
+    int arg2 = tac->src2->value;
+
+    char* reg1 = sprint_reg(get_reg('t'));
+    char* reg2 = sprint_reg(get_reg('t'));
+
+    if(is_reg(tac->src1)) {
+        fprintf(file, "\tmove $%s, $%s\n", reg1, sprint_reg(tac->src1));
+    } else {
+        fprintf(file, "\tli $%s, %d\n", reg1, arg1);
+    }
+
+    if(is_reg(tac->src2)) {
+        fprintf(file, "\tmove $%s, $%s\n", reg2, sprint_reg(tac->src2));
+    } else {
+        fprintf(file, "\tli $%s, %d\n", reg2, arg2);
+    }
+
+    fprintf(file, "\tsub $%s, $%s, $%s\n", sprint_reg(tac->dst), reg1, reg2);
     return;
 }
 
 void handle_mul(TAC* tac) {
+    int arg1 = tac->src1->value;
+    int arg2 = tac->src2->value;
+
+    char* reg1 = sprint_reg(get_reg('t'));
+    char* reg2 = sprint_reg(get_reg('t'));
+
+    if(is_reg(tac->src1)) {
+        fprintf(file, "\tmove $%s, $%s\n", reg1, sprint_reg(tac->src1));
+    } else {
+        fprintf(file, "\tli $%s, %d\n", reg1, arg1);
+    }
+
+    if(is_reg(tac->src2)) {
+        fprintf(file, "\tmove $%s, $%s\n", reg2, sprint_reg(tac->src2));
+    } else {
+        fprintf(file, "\tli $%s, %d\n", reg2, arg2);
+    }
+    fprintf(file, "\tmul $%s, $%s, $%s\n", sprint_reg(tac->dst), reg1, reg2);
     return;
 }
 
 void handle_div(TAC* tac) {
+    int arg1 = tac->src1->value;
+    int arg2 = tac->src2->value;
+
+    char* reg1 = sprint_reg(get_reg('t'));
+    char* reg2 = sprint_reg(get_reg('t'));
+
+    if(is_reg(tac->src1)) {
+        fprintf(file, "\tmove $%s, $%s\n", reg1, sprint_reg(tac->src1));
+    } else {
+        fprintf(file, "\tli $%s, %d\n", reg1, arg1);
+    }
+
+    if(is_reg(tac->src2)) {
+        fprintf(file, "\tmove $%s, $%s\n", reg2, sprint_reg(tac->src2));
+    } else {
+        fprintf(file, "\tli $%s, %d\n", reg2, arg2);
+    }
+
+    fprintf(file, "\tdiv $%s, $%s, $%s\n", sprint_reg(tac->dst), reg1, reg2);
     return;
 }
 
 void handle_mod(TAC* tac) {
+    int arg1 = tac->src1->value;
+    int arg2 = tac->src2->value;
+
+    char* reg1 = sprint_reg(get_reg('t'));
+    char* reg2 = sprint_reg(get_reg('t'));
+
+    if(is_reg(tac->src1)) {
+        fprintf(file, "\tmove $%s, $%s\n", reg1, sprint_reg(tac->src1));
+    } else {
+        fprintf(file, "\tli $%s, %d\n", reg1, arg1);
+    }
+
+    if(is_reg(tac->src2)) {
+        fprintf(file, "\tmove $%s, $%s\n", reg2, sprint_reg(tac->src2));
+    } else {
+        fprintf(file, "\tli $%s, %d\n", reg2, arg2);
+    }
+
+    fprintf(file, "\trem $%s, $%s, $%s\n", sprint_reg(tac->dst), reg1, reg2);
     return;
 }
 
@@ -95,6 +187,12 @@ void handle_call(TAC* tac) {
 }
 
 void handle_ret(TAC* tac) {
+    int arg1 = tac->src1->value;
+    if(tac->src1->type == 't' || tac->src1->type == 'a') {
+        fprintf(file, "\tmove $a0, $%s\n\tli $v0, 1\n\tsyscall\n", sprint_reg(tac->src1));
+    } else {
+        fprintf(file, "\tli $a0, %d\n", arg1);
+    }
     return;
 }
 
@@ -108,11 +206,13 @@ void handle_lesser(TAC* tac) {
 
 void compile(TAC* program, char* filename) {
     file = fopen(filename, "w");
+    fprintf(file, "\t.globl main\n\n\t.text\n\nmain:\n\n");
     TAC* current = program;
     while(current != NULL) {
         handle(current);
         current = current->next;
     }
+    fprintf(file, "\tli $v0, 10\n\tsyscall\n");
     puts("Compiled");
     fclose(file);
 }
