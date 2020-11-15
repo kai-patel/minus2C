@@ -4,7 +4,7 @@
 
 #ifndef GENTAC_H
 #define GENTAC_H
-enum ops {ADD, SUB, MUL, DIV, MOD, CALL_ENUM, RET, STORE, GREATER, LESSER, LABEL, FUNC, END_FUNC};
+enum ops {ADD, SUB, MUL, DIV, MOD, CALL_ENUM, RET, STORE, GREATER, LESSER, LABEL, FUNC, END_FUNC, IF_ENUM};
 
 typedef struct tac TAC;
 
@@ -41,6 +41,8 @@ TAC* gen_tac(NODE*, FRAME*);
 
 extern TOKEN* get_reg(char);
 
+TOKEN* get_label();
+
 static void add_tac(TAC*);
 
 static TAC* create_tac();
@@ -74,6 +76,8 @@ static TAC* gen_tac_mod(NODE*, FRAME*);
 static TAC* gen_tac_greater(NODE*, FRAME*);
 
 static TAC* gen_tac_lesser(NODE*, FRAME*);
+
+static TAC* gen_tac_if(NODE*, FRAME*);
 
 extern TAC* run_gen_tac(NODE*, FRAME*);
 

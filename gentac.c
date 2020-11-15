@@ -44,6 +44,8 @@ char* named_ops(int i) {
             return "PROC";
         case 12:
             return "ENDPROC";
+        case 13:
+            return "IF";
         default:
             return "???";
     }
@@ -59,6 +61,17 @@ TOKEN* get_reg(char type) {
     if(type == 'a') t->value = ++latest_a;
     t->lexeme = NULL;
     t->next = NULL;
+    return t;
+}
+
+int latest_label = 0;
+TOKEN* get_label() {
+    TOKEN* t = new_token(LABEL);
+    char* s = malloc(12*sizeof(char));
+    //printf("%c%d\n", latest_label % 127 + 97, latest_label / 26);
+    sprintf(s, "label_%c%d", latest_label % 127 + 97, latest_label / 26);
+    t->lexeme = s;
+    //printf("new label: %s\n", t->lexeme);
     return t;
 }
 
@@ -110,6 +123,8 @@ void print_token(TOKEN* tok) {
         printf("%d", tok->value);
     } else if(tok->type == IDENTIFIER) {
         printf("%s", tok->lexeme);
+    } else if(tok->type == LABEL) {
+        printf("%s", tok->lexeme);
     } else {
         printf("%s", tok->lexeme);
     }
@@ -125,13 +140,16 @@ void print_tac(TAC* tac) {
         printf("%s %s %d\n", named_ops(tac->op), tac->args.proc.name->lexeme, tac->args.proc.arity);
         return;
     }
+
     if(tac->dst) {
         print_token(tac->dst);
         printf(" = ");
     }
     printf("%s ", named_ops(tac->op));
-    if(tac->src1) print_token(tac->src1);
-    printf(" ");
+    if(tac->src1) {
+        print_token(tac->src1);
+        printf(" ");
+    }
     if(tac->src2) print_token(tac->src2);
     puts(" ");
     return;
@@ -259,6 +277,24 @@ TAC* gen_tac_lesser(NODE* term, FRAME* frame) {
     return tac;
 }
 
+TAC* gen_tac_if(NODE* term, FRAME* frame) {
+    TAC* tac = create_tac();
+    tac->op = IF_ENUM;
+    TAC* test = gen_tac(term->left, frame);
+    //print_tac(test);
+    tac->src1 = test->dst;
+    tac->src2 = get_label();
+
+    //tac = gen_tac(term->left, frame);
+    //tac->src1 = gen_tac(term->left, frame)->dst;
+
+    //tac->src2 = get_label();
+    //printf("made label: %s\n", tac->src1->lexeme);
+
+    add_tac(tac);
+    return tac;
+}
+
 TAC* gen_tac_assign(NODE* term, FRAME* frame) {
     TAC* tac = create_tac();
     tac->op = STORE;
@@ -379,6 +415,7 @@ TAC* gen_tac_call(TOKEN* token, NODE* args, FRAME* frame) {
     tac->args.call.arity = n_args;
     tac->op = CALL_ENUM;
     tac->src1 = token;
+    tac->dst = get_reg('t');
     add_tac(tac);
     return tac;
     //return gen_tac(f->code, new_frame);
@@ -386,6 +423,7 @@ TAC* gen_tac_call(TOKEN* token, NODE* args, FRAME* frame) {
 
 TAC* gen_tac(NODE* term, FRAME* frame) {
     if(term == NULL) return NULL;
+    //printf("%s\n", named(term->type));
     switch(term->type) {
         case LEAF:
             return leaf_to_token(term, frame);
@@ -393,6 +431,8 @@ TAC* gen_tac(NODE* term, FRAME* frame) {
             return gen_tac_return(term, frame);
         case APPLY:
             return gen_tac_call((TOKEN*) term->left->left, term->right, frame);
+        case IF:
+            return gen_tac_if(term, frame);
         default:
             if(ispunct(term->type)) {
                 return (TAC*) gen_tac_punct(term, frame);
@@ -423,6 +463,6 @@ void cleanup_gen_tac(TAC* head) {
     while (head != NULL) {
         tmp = head;
         head = head->next;
-        free(tmp);
+        //free(tmp);
     }
 }
