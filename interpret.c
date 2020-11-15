@@ -15,6 +15,8 @@ extern VALUE* frame_check(TOKEN*, FRAME*);
 extern VALUE* frame_assign(TOKEN*, FRAME*, VALUE*);
 extern FRAME* frame_extend(FRAME*, NODE*, NODE*);
 
+static VALUE* ret_val = NULL;
+
 static NODE* formals(CLOSURE* f) {
     return NULL;
 }
@@ -191,13 +193,28 @@ static VALUE* interpret_punct(NODE* term, FRAME* frame) {
 }
 
 static VALUE* interpret_if(NODE* term, FRAME* frame) {
-    if(interpret(term->left, frame)) {
-        puts("Condition was true!");
-        return NULL;
+    //printf("%s\n", named(term->type));
+    VALUE* result = interpret(term->left, frame);
+    if(result->v.integer > 0) {
+        //puts("Condition was true!");
+        if(term->right->type == ELSE) {
+            result = interpret(term->right->left, frame);
+        } else {
+            result = interpret(term->right, frame);
+        }
     } else {
-        puts("Condition was false!");
-        return NULL;
+        //puts("Condition was false!");
+        if(term->right->type == ELSE) {
+            result = interpret(term->right->right, frame);
+        } else {
+            result = NULL;
+        }
     }
+    return result;
+}
+
+static VALUE* interpret_else(NODE* term, FRAME* frame) {
+
     return NULL;
 }
 
@@ -250,15 +267,23 @@ static VALUE* lexical_call(TOKEN* name, NODE* args, FRAME* frame) {
     return interpret(f->code, new_frame);
 }
 
+static VALUE* interpret_return(NODE* term, FRAME* frame) {
+    VALUE* val = interpret(term->left, frame);
+    if(ret_val) {
+        return ret_val;
+    } else {
+        ret_val = val;
+        return val;
+    }
+}
+
 VALUE* interpret(NODE* term, FRAME* frame) {
-    if(term == NULL) return NULL;
+    if(term == NULL) return ret_val;
     switch(term->type) {
         case LEAF:
             return (VALUE*) interpret_leaf(term, frame);
         case RETURN:
-            { VALUE* val = (VALUE*) interpret(term->left, frame);
-                return val;
-            }
+            return (VALUE*) interpret_return(term, frame);
         case EQ_OP:
             return (VALUE*) interpret_equality(term, frame);
         case NE_OP:
@@ -267,6 +292,8 @@ VALUE* interpret(NODE* term, FRAME* frame) {
             return (VALUE*) interpret_if(term, frame);
         case APPLY:
             return lexical_call((TOKEN*) term->left->left, term->right, frame);
+        case ELSE:
+            return (VALUE*) interpret_else(term, frame);
         default:
             if(ispunct(term->type)) {
                 return (VALUE*) interpret_punct(term, frame);

@@ -4,12 +4,16 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include "gentac.h"
 
 extern char* named(int);
 
 extern VALUE* frame_check(TOKEN*, FRAME*);
 extern VALUE* frame_assign(TOKEN*, FRAME*, VALUE*);
+
+static TAC* head = NULL;
+static BB* bb_head = NULL;
 
 char* named_ops(int i) {
     //printf("Called named ops with i: %d\n", i);
@@ -34,6 +38,12 @@ char* named_ops(int i) {
             return ">";
         case 9:
             return "<";
+        case 10:
+            return "LABEL";
+        case 11:
+            return "PROC";
+        case 12:
+            return "ENDPROC";
         default:
             return "???";
     }
@@ -63,7 +73,6 @@ TAC* create_tac(void) {
     return tac;
 }
 
-TAC* head = NULL;
 
 void add_tac(TAC* tac) {
     if(head == NULL) {
@@ -77,6 +86,22 @@ void add_tac(TAC* tac) {
     current->next = tac;
     return;
 }
+
+#if 0
+void add_bb(BB* bb) {
+    if(bb_head == NULL) {
+        bb_head = bb;
+        return;
+    }
+
+    BB* current = bb_head;
+    while(current->next != NULL) {
+        current = current->next;
+    }
+    current->next = bb;
+    return;
+}
+#endif
 
 void print_token(TOKEN* tok) {
     if(tok->type == 't' || tok->type == 'a') {
@@ -96,12 +121,17 @@ void print_reg(TOKEN* tok) {
 }
 
 void print_tac(TAC* tac) {
+    if(tac->op == FUNC) {
+        printf("%s %s %d\n", named_ops(tac->op), tac->args.proc.name->lexeme, tac->args.proc.arity);
+        return;
+    }
     if(tac->dst) {
         print_token(tac->dst);
         printf(" = ");
     }
+    printf("%s ", named_ops(tac->op));
     if(tac->src1) print_token(tac->src1);
-    printf(" %s ", named_ops(tac->op));
+    printf(" ");
     if(tac->src2) print_token(tac->src2);
     puts(" ");
     return;
@@ -261,6 +291,7 @@ TAC* gen_tac_punct(NODE* term, FRAME* frame) {
         case '=':
             return gen_tac_assign(term, frame);
         case '~':
+            gen_tac(term->left, frame);
             return gen_tac(term->right, frame);
         case ';':
             gen_tac(term->left, frame);
@@ -270,6 +301,89 @@ TAC* gen_tac_punct(NODE* term, FRAME* frame) {
     }
 }
 
+TAC* gen_tac_declaration(NODE* term, FRAME* frame) {
+    NODE* d = term->left;
+    NODE* code = term->right;
+
+    NODE* type = d->left;
+    NODE* F = d->right;
+
+    TOKEN* t = (TOKEN*) F->left->left;
+    NODE* formals = F->right;
+    //printf("Found function: %s\t%p\n", t->lexeme, t);
+
+#if 0
+    if(strcmp(t->lexeme, "main") == 0) {
+        //puts("Found main, starting program");
+        return gen_tac(code, frame);
+    }
+#endif
+
+    VALUE* bound = frame_check(t, frame);
+    if(bound != NULL) {
+        printf("ERROR: FUNCTION ALREADY DEFINED\n");
+        exit(-1);
+    } else {
+        VALUE* val = create_value();
+        CLOSURE* f = malloc(sizeof(CLOSURE));
+
+        f->name = t;
+        f->formals = formals;
+        f->frame = frame;
+        f->code = code;
+        val->v.f = f;
+        frame_declaration(t, frame);
+        frame_assign(t, frame, val);
+
+        int n_formals = 0;
+        NODE* current = formals;
+        while(current != NULL) {
+            n_formals++;
+            current = current->right;
+        }
+
+        TAC* tac = create_tac();
+        tac->op = FUNC;
+        tac->args.proc.name = t;
+        tac->args.proc.arity = n_formals;
+        add_tac(tac);
+
+        //this used to end here with return gen_tac(code, frame);
+        gen_tac(code, frame);
+
+        TAC* tac2 = create_tac();
+        tac2->op = END_FUNC;
+        tac2->args.proc.name = t;
+        add_tac(tac2);
+    }
+
+    return NULL;
+}
+
+TAC* gen_tac_call(TOKEN* token, NODE* args, FRAME* frame) {
+    TAC* tac = create_tac();
+    tac->args.call.name = token;
+
+    VALUE* val = frame_check(token, frame);
+
+    CLOSURE* f = val->v.f;
+    FRAME* new_frame = frame_extend(frame, f->formals, args);
+    new_frame->next = f->frame;
+
+    NODE* iter_args = args;
+    int n_args = 0;
+    while(iter_args != NULL) {
+        n_args++;
+        iter_args = iter_args->right;
+    }
+    tac->args.call.arity = n_args;
+    tac->op = CALL_ENUM;
+    tac->src1 = token;
+    add_tac(tac);
+    return tac;
+    //return gen_tac(f->code, new_frame);
+}
+
 TAC* gen_tac(NODE* term, FRAME* frame) {
     if(term == NULL) return NULL;
     switch(term->type) {
@@ -277,11 +391,14 @@ TAC* gen_tac(NODE* term, FRAME* frame) {
             return leaf_to_token(term, frame);
         case RETURN:
             return gen_tac_return(term, frame);
+        case APPLY:
+            return gen_tac_call((TOKEN*) term->left->left, term->right, frame);
         default:
             if(ispunct(term->type)) {
                 return (TAC*) gen_tac_punct(term, frame);
             } else {
                 //printf("Cannot generate TAC from %s yet!\n", named(term->type));
+                if(term->type == 'D') return gen_tac_declaration(term, frame);
                 gen_tac(term->left, frame);
                 gen_tac(term->right, frame);
                 break;
@@ -294,6 +411,13 @@ TAC* run_gen_tac(NODE* term, FRAME* frame) {
     return head;
 }
 
+BB* get_basic_blocks(TAC* head, FRAME* frame) {
+    TAC* current = head;
+    while(current != NULL) {
+        current;
+    }
+}
+
 void cleanup_gen_tac(TAC* head) {
     TAC* tmp;
     while (head != NULL) {
@@ -301,5 +425,4 @@ void cleanup_gen_tac(TAC* head) {
         head = head->next;
         free(tmp);
     }
-
 }

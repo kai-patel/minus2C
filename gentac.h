@@ -4,9 +4,14 @@
 
 #ifndef GENTAC_H
 #define GENTAC_H
-enum ops {ADD, SUB, MUL, DIV, MOD, CALL_ENUM, RET, STORE, GREATER, LESSER};
+enum ops {ADD, SUB, MUL, DIV, MOD, CALL_ENUM, RET, STORE, GREATER, LESSER, LABEL, FUNC, END_FUNC};
 
 typedef struct tac TAC;
+
+typedef struct proc {
+    TOKEN* name;
+    int arity;
+} PROC;
 
 typedef struct block {
     int nvars;
@@ -19,7 +24,7 @@ typedef struct call {
 
 typedef struct tac {
     enum ops op;
-    union { BLOCK block; CALL call; } args;
+    union { BLOCK block; CALL call; PROC proc; } args;
     TOKEN* src1, *src2, *dst;
     TAC* next;
 } TAC;
@@ -28,7 +33,9 @@ typedef struct block BLOCK;
 
 typedef struct call CALL;
 
-typedef struct bb BB;
+typedef struct bb {
+    TAC* leader;
+} BB;
 
 TAC* gen_tac(NODE*, FRAME*);
 
