@@ -1,8 +1,11 @@
-int hello() {
-    int x = 10;
-    if(x > 0) return 0;
-    return x;
+int factorial(int n) {
+    if(n == 0) return 1;
+    return n * factorial(n-1);
 }
+
 int main() {
-    return hello();
+    int x = 10;
+    print_str("Factorial Result: ");
+    print_int(factorial(x));
+    return 0;
 }

@@ -38,5 +38,7 @@ static VALUE* interpret_assign(NODE*, FRAME*);
 
 static VALUE* lexical_call(TOKEN*, NODE*, FRAME*);
 
+static void call_builtin(NODE*, FRAME*);
+
 extern void cleanup_interpret(NODE*, FRAME*);
 #endif

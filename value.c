@@ -24,7 +24,7 @@ void print_value(VALUE* val) {
     } else if(val->type == IDENTIFIER) {
         printf("%s", val->v.string);
     } else {
-        printf("Closure \"%p\"", val->v.f);
+        printf("Closure \"%s\"", val->v.f->name->lexeme);
         //printf("%d not implemented yet", (val->type));
         return;
     }

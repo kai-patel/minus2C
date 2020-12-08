@@ -58,7 +58,12 @@ FRAME* frame_extend(FRAME* frame, NODE* ids, NODE* args) {
     FRAME* new_frame = frame_create();
     BINDING* bindings = NULL;
     for(NODE* ip = ids, *ap = args; (ip !=NULL) && (ap != NULL); ip = ip->right, ap = ap->right) {
-        bindings = make_binding(ip->left, interpret(ap->left, frame), bindings);
+        VALUE* interpreted = interpret(ap, frame);
+        //puts("Value: ");
+        //print_value(interpreted);
+        //puts(" ");
+        //make binding should take formal (e.g. a), interpreted value (e.g. 10) and assign them to each other
+        bindings = make_binding(ip->left, interpreted, bindings);
     }
     new_frame->bindings = bindings;
     return new_frame;
