@@ -46,6 +46,8 @@ char* named_ops(int i) {
             return "ENDPROC";
         case 13:
             return "IF";
+        case 14:
+            return "GOTO";
         default:
             return "???";
     }
@@ -64,12 +66,12 @@ TOKEN* get_reg(char type) {
     return t;
 }
 
-int latest_label = 0;
+int latest_label = -1;
 TOKEN* get_label() {
     TOKEN* t = new_token(LABEL);
     char* s = malloc(12*sizeof(char));
     //printf("%c%d\n", latest_label % 127 + 97, latest_label / 26);
-    sprintf(s, "label_%c%d", latest_label % 127 + 97, latest_label / 26);
+    sprintf(s, "label_%c%d", latest_label % 127 + 97, ++latest_label / 26);
     t->lexeme = s;
     //printf("new label: %s\n", t->lexeme);
     return t;
@@ -138,6 +140,25 @@ void print_reg(TOKEN* tok) {
 void print_tac(TAC* tac) {
     if(tac->op == FUNC) {
         printf("%s %s %d\n", named_ops(tac->op), tac->args.proc.name->lexeme, tac->args.proc.arity);
+        return;
+    }
+
+    if(tac->op == IF_ENUM) {
+        printf("%s ", named_ops(tac->op));
+
+        printf("%s ", named_ops(tac->args.test->op));
+        if(tac->args.test->src1) {
+            print_token(tac->args.test->src1);
+            printf(" ");
+        }
+
+        if(tac->args.test->src2) {
+            print_token(tac->args.test->src2);
+            printf(" ");
+        }
+
+        print_token(tac->src2);
+        puts(" ");
         return;
     }
 
@@ -279,19 +300,59 @@ TAC* gen_tac_lesser(NODE* term, FRAME* frame) {
 
 TAC* gen_tac_if(NODE* term, FRAME* frame) {
     TAC* tac = create_tac();
+    //handle first part of if
     tac->op = IF_ENUM;
     TAC* test = gen_tac(term->left, frame);
-    //print_tac(test);
+
+    // Remove test TAC from list (its been "saved" into the if TAC)
+    TAC* current = head;
+    while(current->next->next) {
+        current = current->next;
+    }
+
+    current->next = NULL;
+
+    tac->args.test = test;
     tac->src1 = test->dst;
     tac->src2 = get_label();
 
-    //tac = gen_tac(term->left, frame);
-    //tac->src1 = gen_tac(term->left, frame)->dst;
-
-    //tac->src2 = get_label();
-    //printf("made label: %s\n", tac->src1->lexeme);
-
+    //add condition to TAC list
     add_tac(tac);
+
+    //add TAC for truthy condition
+    TAC* truthy;
+    if(term->right->type == ELSE) {
+        truthy = gen_tac(term->right->left, frame);
+    } else {
+        truthy = gen_tac(term->right, frame);
+    }
+
+    //add GOTO to skip falsey body
+    TOKEN* label_end_falsey = get_label();
+    TAC* go_tac = create_tac();
+    go_tac->op = GOTO;
+    go_tac->src2 = label_end_falsey;
+
+    add_tac(go_tac);
+
+    //add label for falsey body
+    TAC* label_falsey = create_tac();
+    label_falsey->op = LABEL;
+    label_falsey->src2 = tac->src2;
+    add_tac(label_falsey);
+
+    //add falsey body
+    TAC* falsey = NULL;
+    if(term->right->type == ELSE) {
+        falsey = gen_tac(term->right->right, frame);
+    }
+
+    //add label for end of falsey body
+    TAC* end_falsey = create_tac();
+    end_falsey->op = LABEL;
+    end_falsey->src2 = label_end_falsey;
+    add_tac(end_falsey);
+
     return tac;
 }
 

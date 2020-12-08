@@ -4,7 +4,7 @@
 
 #ifndef GENTAC_H
 #define GENTAC_H
-enum ops {ADD, SUB, MUL, DIV, MOD, CALL_ENUM, RET, STORE, GREATER, LESSER, LABEL, FUNC, END_FUNC, IF_ENUM};
+enum ops {ADD, SUB, MUL, DIV, MOD, CALL_ENUM, RET, STORE, GREATER, LESSER, LABEL, FUNC, END_FUNC, IF_ENUM, GOTO};
 
 typedef struct tac TAC;
 
@@ -24,7 +24,7 @@ typedef struct call {
 
 typedef struct tac {
     enum ops op;
-    union { BLOCK block; CALL call; PROC proc; } args;
+    union { BLOCK block; CALL call; PROC proc; TAC* test; } args;
     TOKEN* src1, *src2, *dst;
     TAC* next;
 } TAC;

@@ -281,7 +281,7 @@ static VALUE* lexical_call(TOKEN* name, NODE* args, FRAME* frame) {
     VALUE* val = frame_check(name, frame);
 
     if(val == NULL) {
-        print_leaf(name, 0);
+        print_leaf((NODE*) name, 0);
         puts("ERROR: COULD NOT FIND FUNCTION");
         return NULL;
     }
