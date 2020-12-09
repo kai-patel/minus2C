@@ -79,7 +79,7 @@ void handle_assign(TAC* tac) {
 }
 
 void handle_add(TAC* tac) {
-    fprintf(file, "\t; Handling addition\n");
+    fprintf(file, "\t# Handling addition\n");
     int arg1 = tac->src1->value;
     int arg2 = tac->src2->value;
 
@@ -103,7 +103,7 @@ void handle_add(TAC* tac) {
 }
 
 void handle_sub(TAC* tac) {
-    fprintf(file, "\t; Handling subtraction\n");
+    fprintf(file, "\t# Handling subtraction\n");
     int arg1 = tac->src1->value;
     int arg2 = tac->src2->value;
 
@@ -127,7 +127,7 @@ void handle_sub(TAC* tac) {
 }
 
 void handle_mul(TAC* tac) {
-    fprintf(file, "\t; Handling multiplication\n");
+    fprintf(file, "\t# Handling multiplication\n");
     int arg1 = tac->src1->value;
     int arg2 = tac->src2->value;
 
@@ -150,7 +150,7 @@ void handle_mul(TAC* tac) {
 }
 
 void handle_div(TAC* tac) {
-    fprintf(file, "\t; Handling division\n");
+    fprintf(file, "\t# Handling division\n");
     int arg1 = tac->src1->value;
     int arg2 = tac->src2->value;
 
@@ -174,7 +174,7 @@ void handle_div(TAC* tac) {
 }
 
 void handle_mod(TAC* tac) {
-    fprintf(file, "\t; Handling mod\n");
+    fprintf(file, "\t# Handling mod\n");
     int arg1 = tac->src1->value;
     int arg2 = tac->src2->value;
 
@@ -202,7 +202,7 @@ void handle_call(TAC* tac) {
 }
 
 void handle_ret(TAC* tac) {
-    fprintf(file, "\t; Handling return\n");
+    fprintf(file, "\t# Handling return\n");
     int arg1 = tac->src1->value;
     if(tac->src1->type == 't' || tac->src1->type == 'a') {
         fprintf(file, "\tmove $a0, $%s\n\tli $v0, 1\n\tsyscall\n", sprint_reg(tac->src1));
@@ -219,7 +219,7 @@ void handle_if(TAC* tac) {
     switch(op) {
         case LESSER:
             {
-                fprintf(file, "\t; Handling < condition\n");
+                fprintf(file, "\t# Handling < condition\n");
                 char* reg1;
                 char* reg2;
                 if(is_reg(test->src1)) {

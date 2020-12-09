@@ -191,6 +191,12 @@ TAC* leaf_to_token(NODE* term, FRAME* frame) {
     TOKEN* t = (TOKEN*) term->left;
     //printf("%d  %s  %d\n", t->type, t->lexeme, t->value);
     if(t == NULL) return NULL;
+
+    VALUE* bound = frame_check(t, frame);
+    if(bound != NULL) {
+        t = (TOKEN*) bound;
+    }
+
     TAC* tac = create_tac();
     tac->src1 = t;
     return tac;
@@ -362,7 +368,29 @@ TAC* gen_tac_assign(NODE* term, FRAME* frame) {
     TAC* left = gen_tac(term->left, frame);
     TAC* right = gen_tac(term->right, frame);
     tac->dst = left->dst ? left->dst : left->src1;
-    tac->src1 = right->dst ? right->dst : right->src1;
+    //tac->src1 = right->dst ? right->dst : right->src1;
+    if(right->dst) {
+        //if the assignment expression has a register, use it
+        tac->src1 = right->dst;
+    } else {
+        //otherwise manually load into register
+        right->dst = get_reg('t');
+        TAC* load = create_tac();
+        load->op = STORE;
+        load->src1 = right->src1;
+        load->dst= right->dst;
+        add_tac(load);
+        tac->src1 = right->dst;
+    }
+
+    VALUE* bound = frame_check(tac->src1, frame);
+    if(bound != NULL) {
+        frame_assign(tac->src1, frame, (VALUE*) tac->dst);
+    } else {
+        frame_declaration(tac->src1, frame);
+        frame_assign(tac->src1, frame, (VALUE*) tac->dst);
+    }
+
     //print_tac(tac);
     add_tac(tac);
     return tac;

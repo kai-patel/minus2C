@@ -1,8 +1,5 @@
 int main() {
-    if(5 < 2) {
-        5 + 4;
-    } else {
-        5 - 2;
-    }
+    int x = 10;
+    int y = x;
     return 0;
 }
