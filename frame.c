@@ -26,6 +26,20 @@ VALUE* frame_check(TOKEN* x, FRAME* frame) {
     return NULL;
 }
 
+VALUE* frame_check_reverse(TOKEN* x, FRAME* frame) {
+    while(frame != NULL) {
+        BINDING* bindings = frame->bindings;
+        while(bindings != NULL) {
+            if((TOKEN*) bindings->val == x) {
+                return (VALUE*) bindings->name;
+            }
+            bindings = bindings->next;
+        }
+        frame = frame->next;
+    }
+    return NULL;
+}
+
 VALUE* frame_assign(TOKEN* x, FRAME* frame, VALUE* value) {
     while(frame != NULL) {
         BINDING* bindings = frame->bindings;

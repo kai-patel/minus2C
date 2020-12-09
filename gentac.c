@@ -10,6 +10,7 @@
 extern char* named(int);
 
 extern VALUE* frame_check(TOKEN*, FRAME*);
+extern VALUE* frame_check_reverse(TOKEN*, FRAME*);
 extern VALUE* frame_assign(TOKEN*, FRAME*, VALUE*);
 
 static TAC* head = NULL;
@@ -192,7 +193,7 @@ TAC* leaf_to_token(NODE* term, FRAME* frame) {
     //printf("%d  %s  %d\n", t->type, t->lexeme, t->value);
     if(t == NULL) return NULL;
 
-    VALUE* bound = frame_check(t, frame);
+    VALUE* bound = frame_check_reverse(t, frame);
     if(bound != NULL) {
         t = (TOKEN*) bound;
     }
