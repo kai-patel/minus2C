@@ -68,6 +68,8 @@ void handle(TAC* tac) {
         case GOTO:
             handle_goto(tac);
             break;
+        case SET:
+            break;
         default:
             printf("%d: Could not handle TAC!\n", tac->op);
             break;
@@ -75,6 +77,10 @@ void handle(TAC* tac) {
 }
 
 void handle_assign(TAC* tac) {
+    TOKEN* reg = tac->dst;
+    int arg = tac->src1->value;
+    fprintf(file, "\t# Handling variable storage\n");
+    fprintf(file, "\tli $%s, %d\n", sprint_reg(reg), arg);
     return;
 }
 
@@ -263,12 +269,14 @@ void handle_lesser(TAC* tac) {
 
 void compile(TAC* program, char* filename) {
     file = fopen(filename, "w");
+    fprintf(file, "# Standard program preamble\n");
     fprintf(file, "\t.globl main\n\n\t.text\n\nmain:\n\n");
     current = program;
     while(current != NULL) {
         handle(current);
         current = current->next;
     }
+    fprintf(file, "\t# Standard program exit\n");
     fprintf(file, "\tli $v0, 10\n\tsyscall\n");
     puts("Compiled");
     fclose(file);

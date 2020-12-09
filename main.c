@@ -145,6 +145,16 @@ void call_compiler(NODE* tree) {
     FRAME* frame = frame_create();
     TAC* result = run_gen_tac(tree, frame);
     compile(result, "a.s");
+    cleanup_gen_tac(result);
+    return;
+}
+
+void debug_compiler(NODE* tree) {
+    FRAME* frame = frame_create();
+    TAC* result = run_gen_tac(tree, frame);
+    print_tac_program(result);
+    compile(result, "a.s");
+    cleanup_gen_tac(result);
     return;
 }
 
@@ -168,6 +178,8 @@ int main(int argc, char** argv) {
         call_gentac(tree);
     } else if(strcmp(argv[1], "-c") == 0) {
         call_compiler(tree);
+    } else if(strcmp(argv[1], "-a") == 0) {
+        debug_compiler(tree);
     }
 
     return 0;

@@ -49,6 +49,8 @@ char* named_ops(int i) {
             return "IF";
         case 14:
             return "GOTO";
+        case 15:
+            return "SET";
         default:
             return "???";
     }
@@ -365,7 +367,7 @@ TAC* gen_tac_if(NODE* term, FRAME* frame) {
 
 TAC* gen_tac_assign(NODE* term, FRAME* frame) {
     TAC* tac = create_tac();
-    tac->op = STORE;
+    tac->op = SET;
     TAC* left = gen_tac(term->left, frame);
     TAC* right = gen_tac(term->right, frame);
     tac->dst = left->dst ? left->dst : left->src1;
