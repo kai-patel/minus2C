@@ -36,7 +36,7 @@ static VALUE* interpret_if(NODE*, FRAME*);
 
 static VALUE* interpret_assign(NODE*, FRAME*);
 
-static VALUE* lexical_call(TOKEN*, NODE*, FRAME*);
+static VALUE* lexical_call(NODE*, NODE*, FRAME*);
 
 static void call_builtin(NODE*, FRAME*);
 

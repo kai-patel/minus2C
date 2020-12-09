@@ -58,6 +58,9 @@ void handle(TAC* tac) {
         case LESSER:
             handle_lesser(tac);
             break;
+        case IF_ENUM:
+            handle_if(tac);
+            break;
         default:
             puts("Could not handle TAC!");
             break;
@@ -193,6 +196,11 @@ void handle_ret(TAC* tac) {
     } else {
         fprintf(file, "\tli $a0, %d\n", arg1);
     }
+    return;
+}
+
+void handle_if(TAC* tac) {
+
     return;
 }
 

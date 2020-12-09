@@ -127,7 +127,7 @@ void call_interpreter(NODE* tree) {
     FRAME* frame = frame_create();
     //frame = NULL;
     VALUE* result = interpret(tree, frame);
-    //print_value(result);
+    print_value(result);
     puts(" ");
     cleanup_interpret(tree, frame);
     return;

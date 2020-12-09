@@ -239,8 +239,9 @@ static VALUE* interpret_declaration(NODE* term, FRAME* frame) {
     NODE* F = d->right;
 
     TOKEN* t = (TOKEN*) F->left->left;
-    NODE* formals = F->right;
-    //printf("Found function: %s\t%p\n", t->lexeme, t);
+
+
+    printf("Found function: %s\t%p\n", t->lexeme, t);
 
     VALUE* bound = frame_check(t, frame);
     if(bound != NULL) {
@@ -256,7 +257,7 @@ static VALUE* interpret_declaration(NODE* term, FRAME* frame) {
         }
 
         f->name = t;
-        f->formals = formals;
+        f->formals = F->right;
 
         f->frame = frame;
         f->code = code;
@@ -269,29 +270,47 @@ static VALUE* interpret_declaration(NODE* term, FRAME* frame) {
     return NULL;
 }
 
-static VALUE* lexical_call(TOKEN* name, NODE* args, FRAME* frame) {
-    //printf("Calling function: %s\n", name->lexeme);
-    if(strcmp(name->lexeme, "print_str") == 0 || strcmp(name->lexeme, "print_int") == 0) {
-        print_value(interpret(args, frame));
-        printf("\n");
-        return NULL;
+static VALUE* lexical_call(NODE* term, NODE* args, FRAME* frame) {
+    printf("Called lexical_call\n");
+    VALUE* func = interpret(term, frame);
+    CLOSURE* f;
+    TOKEN* name;
+
+    //if the term is already a closure, use it
+    if(func->type != CONSTANT && func->type != STRING_LITERAL && func->type != IDENTIFIER) {
+        f = func->v.f;
+        name = f->name;
+    } else {
+
+        //otherwise its an identifier so find its closure in the frame and use that
+        name = (TOKEN*) term->left;
+
+        VALUE* val = frame_check(name, frame);
+
+        //handle builtins
+        if(strcmp(name->lexeme, "print_str") == 0 || strcmp(name->lexeme, "print_int") == 0) {
+            print_value(interpret(args, frame));
+            printf("\n");
+            return NULL;
+        }
+
+        if(val == NULL) {
+            print_leaf((NODE*) name, 0);
+            puts("ERROR: COULD NOT FIND FUNCTION");
+            return NULL;
+        }
+
+        f = val->v.f;
     }
 
+    printf("Calling function: %s\n", name->lexeme);
 
-    VALUE* val = frame_check(name, frame);
 
-    if(val == NULL) {
-        print_leaf((NODE*) name, 0);
-        puts("ERROR: COULD NOT FIND FUNCTION");
-        return NULL;
-    }
-
-    CLOSURE* f = val->v.f;
     FRAME* new_frame = frame_extend(frame, f->formals->right, args);
     new_frame->next = f->frame;
-    //print_value(interpret(f->code, new_frame));
-    //puts(" ");
-    return interpret(f->code, new_frame);
+
+    VALUE* res = interpret(f->code, new_frame);
+    return res;
 }
 
 static VALUE* interpret_return(NODE* term, FRAME* frame) {
@@ -324,7 +343,7 @@ VALUE* interpret(NODE* term, FRAME* frame) {
         case IF:
             return (VALUE*) interpret_if(term, frame);
         case APPLY:
-            return lexical_call((TOKEN*) term->left->left, term->right, frame);
+            return lexical_call(term->left, term->right, frame);
         case ELSE:
             return (VALUE*) interpret_else(term, frame);
         default:

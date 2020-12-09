@@ -1,9 +1,8 @@
+int add(int a) {
+    return a + 5;
+}
+
 int main() {
-    int x = 10;
-    if(x > 10) {
-        return 1;
-    } else {
-        return 2;
-    }
+    print_int(add(2));
     return 0;
 }

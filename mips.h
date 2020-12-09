@@ -31,4 +31,6 @@ static void handle_ret(TAC*);
 static void handle_greater(TAC*);
 
 static void handle_lesser(TAC*);
+
+static void handle_if(TAC*);
 #endif
