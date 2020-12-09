@@ -62,7 +62,7 @@ void handle(TAC* tac) {
             handle_if(tac);
             break;
         default:
-            puts("Could not handle TAC!");
+            printf("%d: Could not handle TAC!\n", tac->op);
             break;
     }
 }
@@ -200,7 +200,36 @@ void handle_ret(TAC* tac) {
 }
 
 void handle_if(TAC* tac) {
+    TAC* test = tac->args.test;
+    int op = test->op;
 
+    switch(op) {
+        case LESSER:
+            {
+                fprintf(file, "; Handling < condition\n");
+                char* reg1;
+                char* reg2;
+                if(is_reg(test->src1)) {
+                    reg1 = sprint_reg(test->src1);
+                } else {
+                    reg1 = sprint_reg(get_reg('t'));
+                    fprintf(file, "\tli $%s, %d\n", reg1, test->src1->value);
+                }
+
+                fprintf(file, "\tbgt $%s, ", reg1);
+
+                if(is_reg(test->src2)) {
+                    fprintf(file, "$%s, ", sprint_reg(test->src2));
+                } else {
+                    fprintf(file, "%d, ", test->src2->value);
+                }
+                fprintf(file, "%s\n", tac->src2->lexeme);
+                handle(tac->next);
+            }
+            break;
+        default:
+            break;
+    }
     return;
 }
 
