@@ -10,6 +10,7 @@ extern void print_tac(TAC*);
 extern TOKEN* get_reg(char);
 
 static FILE* file;
+static TAC* current;
 
 char* sprint_reg(TOKEN* tok) {
     char* reg = malloc(3*sizeof(char));
@@ -61,6 +62,12 @@ void handle(TAC* tac) {
         case IF_ENUM:
             handle_if(tac);
             break;
+        case LABEL:
+            handle_label(tac);
+            break;
+        case GOTO:
+            handle_goto(tac);
+            break;
         default:
             printf("%d: Could not handle TAC!\n", tac->op);
             break;
@@ -72,6 +79,7 @@ void handle_assign(TAC* tac) {
 }
 
 void handle_add(TAC* tac) {
+    fprintf(file, "\t; Handling addition\n");
     int arg1 = tac->src1->value;
     int arg2 = tac->src2->value;
 
@@ -95,6 +103,7 @@ void handle_add(TAC* tac) {
 }
 
 void handle_sub(TAC* tac) {
+    fprintf(file, "\t; Handling subtraction\n");
     int arg1 = tac->src1->value;
     int arg2 = tac->src2->value;
 
@@ -118,6 +127,7 @@ void handle_sub(TAC* tac) {
 }
 
 void handle_mul(TAC* tac) {
+    fprintf(file, "\t; Handling multiplication\n");
     int arg1 = tac->src1->value;
     int arg2 = tac->src2->value;
 
@@ -140,6 +150,7 @@ void handle_mul(TAC* tac) {
 }
 
 void handle_div(TAC* tac) {
+    fprintf(file, "\t; Handling division\n");
     int arg1 = tac->src1->value;
     int arg2 = tac->src2->value;
 
@@ -163,6 +174,7 @@ void handle_div(TAC* tac) {
 }
 
 void handle_mod(TAC* tac) {
+    fprintf(file, "\t; Handling mod\n");
     int arg1 = tac->src1->value;
     int arg2 = tac->src2->value;
 
@@ -190,6 +202,7 @@ void handle_call(TAC* tac) {
 }
 
 void handle_ret(TAC* tac) {
+    fprintf(file, "\t; Handling return\n");
     int arg1 = tac->src1->value;
     if(tac->src1->type == 't' || tac->src1->type == 'a') {
         fprintf(file, "\tmove $a0, $%s\n\tli $v0, 1\n\tsyscall\n", sprint_reg(tac->src1));
@@ -206,7 +219,7 @@ void handle_if(TAC* tac) {
     switch(op) {
         case LESSER:
             {
-                fprintf(file, "; Handling < condition\n");
+                fprintf(file, "\t; Handling < condition\n");
                 char* reg1;
                 char* reg2;
                 if(is_reg(test->src1)) {
@@ -224,13 +237,20 @@ void handle_if(TAC* tac) {
                     fprintf(file, "%d, ", test->src2->value);
                 }
                 fprintf(file, "%s\n", tac->src2->lexeme);
-                handle(tac->next);
             }
             break;
         default:
             break;
     }
     return;
+}
+
+void handle_label(TAC* tac) {
+    fprintf(file, "%s:\n", tac->src2->lexeme);
+}
+
+void handle_goto(TAC* tac) {
+    fprintf(file, "\tj %s\n", tac->src2->lexeme);
 }
 
 void handle_greater(TAC* tac) {
@@ -244,7 +264,7 @@ void handle_lesser(TAC* tac) {
 void compile(TAC* program, char* filename) {
     file = fopen(filename, "w");
     fprintf(file, "\t.globl main\n\n\t.text\n\nmain:\n\n");
-    TAC* current = program;
+    current = program;
     while(current != NULL) {
         handle(current);
         current = current->next;
