@@ -44,5 +44,7 @@ static VALUE* interpret_apply(NODE*, FRAME*);
 
 static void call_builtin(NODE*, FRAME*);
 
+static VALUE* interpret_while(NODE*, FRAME*);
+
 extern void cleanup_interpret(NODE*, FRAME*);
 #endif

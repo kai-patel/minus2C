@@ -20,6 +20,7 @@ VALUE* run_interpret(NODE* term, FRAME* frame) {
 }
 
 static VALUE* ret_val = NULL;
+static int broken = 0;
 
 static NODE* formals(CLOSURE* f) {
     return NULL;
@@ -163,6 +164,15 @@ static VALUE* interpret_inequality(NODE* term, FRAME* frame) {
     val->type = CONSTANT;
     val->v.integer = -1*result;
     //val->v.boolean = result; -- TODO bool functionality (currently stored as constant)
+    return val;
+}
+
+static VALUE* interpret_while(NODE* term, FRAME* frame) {
+    VALUE* val;
+    while(interpret(term->left, frame)->v.integer != 0 && !broken) {
+        val = interpret(term->right, frame);
+    }
+    broken = 0;
     return val;
 }
 
@@ -347,6 +357,11 @@ VALUE* interpret(NODE* term, FRAME* frame) {
             return (VALUE*) interpret_apply(term, frame);
         case ELSE:
             return (VALUE*) interpret_else(term, frame);
+        case WHILE:
+            return (VALUE*) interpret_while(term, frame);
+        case BREAK:
+            broken = 1;
+            return NULL;
         default:
             if(ispunct(term->type)) {
                 return (VALUE*) interpret_punct(term, frame);
