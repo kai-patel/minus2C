@@ -14,6 +14,7 @@ typedef struct closure {
 
 typedef struct value {
     int type;
+    int retval; //is it a value created by interpret_return?
     union {
         int integer;
         int boolean;

@@ -9,6 +9,7 @@ extern char* named(int);
 VALUE* create_value(void) {
     VALUE* value = malloc(sizeof(VALUE));
     value->type = -1;
+    value->retval = 0;
     return value;
 }
 

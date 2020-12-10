@@ -10,6 +10,8 @@
 //TOKEN* FALSE = make_symbol(" FALSE ");
 
 
+extern VALUE* run_interpret(NODE*, FRAME*);
+
 VALUE* interpret(NODE*, FRAME*);
 
 static VALUE* interpret_punct(NODE*, FRAME*);
@@ -36,7 +38,9 @@ static VALUE* interpret_if(NODE*, FRAME*);
 
 static VALUE* interpret_assign(NODE*, FRAME*);
 
-static VALUE* lexical_call(NODE*, NODE*, FRAME*);
+static VALUE* lexical_call(VALUE*, NODE*, FRAME*);
+
+static VALUE* interpret_apply(NODE*, FRAME*);
 
 static void call_builtin(NODE*, FRAME*);
 

@@ -5,12 +5,6 @@
 
 extern VALUE* interpret(NODE*, FRAME*);
 
-typedef struct binding {
-    TOKEN* name;
-    VALUE* val;
-    BINDING* next;
-} BINDING;
-
 VALUE* frame_check(TOKEN* x, FRAME* frame) {
     while(frame != NULL) {
         BINDING* bindings = frame->bindings;
@@ -73,7 +67,7 @@ FRAME* frame_extend(FRAME* frame, NODE* ids, NODE* args) {
     BINDING* bindings = NULL;
     for(NODE* ip = ids, *ap = args; (ip !=NULL) && (ap != NULL); ip = ip->right, ap = ap->right) {
         VALUE* interpreted = interpret(ap, frame);
-        //puts("Value: ");
+        //printf("Arg 1: ");
         //print_value(interpreted);
         //puts(" ");
         //make binding should take formal (e.g. a), interpreted value (e.g. 10) and assign them to each other

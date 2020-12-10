@@ -6,7 +6,11 @@
 #include "value.h"
 #include "token.h"
 
-typedef struct binding BINDING;
+typedef struct binding {
+    TOKEN* name;
+    VALUE* val;
+    struct binding* next;
+} BINDING;
 
 typedef struct frame {
     BINDING* bindings;

@@ -96,7 +96,7 @@ void print_tree(NODE *tree) {
 }
 
 //interpret.h externs
-extern VALUE* interpret(NODE*, FRAME*);
+extern VALUE* run_interpret(NODE*, FRAME*);
 extern void cleanup_interpret(NODE*, FRAME*);
 
 //frame.h externs
@@ -126,9 +126,10 @@ extern TOKEN* lookup_token(char*);
 void call_interpreter(NODE* tree) {
     FRAME* frame = frame_create();
     //frame = NULL;
-    VALUE* result = interpret(tree, frame);
+    VALUE* result = run_interpret(tree, frame);
+    printf("[");
     print_value(result);
-    puts(" ");
+    printf("]\n");
     cleanup_interpret(tree, frame);
     return;
 }

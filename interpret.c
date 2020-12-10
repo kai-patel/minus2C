@@ -15,6 +15,10 @@ extern VALUE* frame_check(TOKEN*, FRAME*);
 extern VALUE* frame_assign(TOKEN*, FRAME*, VALUE*);
 extern FRAME* frame_extend(FRAME*, NODE*, NODE*);
 
+VALUE* run_interpret(NODE* term, FRAME* frame) {
+    return interpret(term, frame);
+}
+
 static VALUE* ret_val = NULL;
 
 static NODE* formals(CLOSURE* f) {
@@ -69,15 +73,15 @@ static VALUE* interpret_assign(NODE* term, FRAME* frame) {
         //print_value(val);
         //puts(" ");
         frame_assign(t, frame, val);
-        return val;
+        return NULL; //statements do not return
     } else {
         VALUE* val = interpret(term->right, frame);
         //printf("Assigning %s to: ", t->lexeme);
         //print_value(val);
         //puts(" ");
         frame_declaration(t, frame);
-        frame_assign(t, frame, interpret(term->right, frame));
-        return val;
+        frame_assign(t, frame, val);
+        return NULL;
     }
 }
 
@@ -185,10 +189,14 @@ static VALUE* interpret_punct(NODE* term, FRAME* frame) {
             interpret(term->left, frame);
             return interpret(term->right, frame);
         case ';':
-            interpret(term->left, frame);
-            return interpret(term->right, frame);
+            {
+                VALUE* first = interpret(term->left, frame);
+                VALUE* second = interpret(term->right, frame);
+                if(first) return first;
+                return second;
+            }
         default:
-            return create_value();
+            return NULL;
     }
 }
 
@@ -241,7 +249,7 @@ static VALUE* interpret_declaration(NODE* term, FRAME* frame) {
     TOKEN* t = (TOKEN*) F->left->left;
 
 
-    printf("Found function: %s\t%p\n", t->lexeme, t);
+    //printf("Found function: %s\t%p\n", t->lexeme, t);
 
     VALUE* bound = frame_check(t, frame);
     if(bound != NULL) {
@@ -270,51 +278,45 @@ static VALUE* interpret_declaration(NODE* term, FRAME* frame) {
     return NULL;
 }
 
-static VALUE* lexical_call(NODE* term, NODE* args, FRAME* frame) {
-    printf("Called lexical_call\n");
-    VALUE* func = interpret(term, frame);
-    CLOSURE* f;
-    TOKEN* name;
+static VALUE* lexical_call(VALUE* function, NODE* args, FRAME* frame) {
+    CLOSURE* f = function->v.f;
 
-    //if the term is already a closure, use it
-    if(func->type != CONSTANT && func->type != STRING_LITERAL && func->type != IDENTIFIER) {
-        f = func->v.f;
-        name = f->name;
-    } else {
-
-        //otherwise its an identifier so find its closure in the frame and use that
-        name = (TOKEN*) term->left;
-
-        VALUE* val = frame_check(name, frame);
-
-        //handle builtins
-        if(strcmp(name->lexeme, "print_str") == 0 || strcmp(name->lexeme, "print_int") == 0) {
-            print_value(interpret(args, frame));
-            printf("\n");
-            return NULL;
-        }
-
-        if(val == NULL) {
-            print_leaf((NODE*) name, 0);
-            puts("ERROR: COULD NOT FIND FUNCTION");
-            return NULL;
-        }
-
-        f = val->v.f;
+    //handle built-ins
+    if(strcmp(function->v.string, "print_str") == 0 || strcmp(function->v.string, "print_int") == 0) {
+        print_value(interpret(args, frame));
+        printf("\n");
+        return NULL;
     }
 
-    printf("Calling function: %s\n", name->lexeme);
+    //printf("Calling function: %s\n", name->lexeme);
 
-
-    FRAME* new_frame = frame_extend(frame, f->formals->right, args);
+    FRAME* new_frame = frame_extend(frame, f->formals ? f->formals->right : f->formals, args);
     new_frame->next = f->frame;
 
     VALUE* res = interpret(f->code, new_frame);
     return res;
 }
 
+static VALUE* interpret_apply(NODE* term, FRAME* frame) {
+    //term is the APPLY node
+
+    VALUE* function = interpret(term->left, frame);
+    NODE* args = term->right;
+    //printf("Applying: ");
+    //print_value(function);
+    //puts(" ");
+    //printf("args: ");
+    //printf("%d\n", ((TOKEN*) args->left)->value);
+    return lexical_call(function, args, frame);
+}
+
 static VALUE* interpret_return(NODE* term, FRAME* frame) {
     VALUE* val = interpret(term->left, frame);
+    val->retval = 1;
+    //printf("Returning: ");
+    //print_value(val);
+    //puts(" ");
+
 #if 1
     ret_val = val;
     return val;
@@ -329,7 +331,6 @@ static VALUE* interpret_return(NODE* term, FRAME* frame) {
 }
 
 VALUE* interpret(NODE* term, FRAME* frame) {
-    if(ret_val) return ret_val;
     if(term == NULL) return ret_val;
     switch(term->type) {
         case LEAF:
@@ -343,7 +344,7 @@ VALUE* interpret(NODE* term, FRAME* frame) {
         case IF:
             return (VALUE*) interpret_if(term, frame);
         case APPLY:
-            return lexical_call(term->left, term->right, frame);
+            return (VALUE*) interpret_apply(term, frame);
         case ELSE:
             return (VALUE*) interpret_else(term, frame);
         default:
@@ -353,9 +354,6 @@ VALUE* interpret(NODE* term, FRAME* frame) {
                 return interpret_punct(term, frame);
             } else if(term->type == 'D') {
                   return interpret_declaration(term, frame);
-            } else {
-                interpret(term->left, frame);
-                interpret(term->right, frame);
             }
             break;
     }
