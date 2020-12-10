@@ -1,11 +1,13 @@
-int get5(int a) {
+int get5() {
+    return 5;
+}
+
+int geta(int a) {
     return a;
 }
+
 int main() {
-    if(3 < 4) {
-        return 5;
-    } else if(6 < 4) {
-        return 6;
-    }
+    get5();
+    geta(2);
     return 0;
 }

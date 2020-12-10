@@ -79,6 +79,10 @@ static TAC* gen_tac_lesser(NODE*, FRAME*);
 
 static TAC* gen_tac_if(NODE*, FRAME*);
 
+static TAC* gen_tac_call(TOKEN*, NODE*, FRAME*);
+
+static TAC* gen_tac_apply(NODE*, FRAME*);
+
 extern TAC* run_gen_tac(NODE*, FRAME*);
 
 extern void print_tac_program(TAC*);

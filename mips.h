@@ -2,6 +2,16 @@
 
 #ifndef MIPS_H
 #define MIPS_H
+typedef struct ar {
+    unsigned char
+        fp,
+        pc,
+        sl,
+        *param,
+        *local,
+        *tmp;
+} AR;
+
 extern void compile(TAC*, char*);
 
 static char* sprint_reg(TOKEN*);

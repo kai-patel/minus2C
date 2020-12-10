@@ -7,6 +7,8 @@
 #include <string.h>
 #include "gentac.h"
 
+#include <unistd.h>
+
 extern char* named(int);
 
 extern VALUE* frame_check(TOKEN*, FRAME*);
@@ -473,7 +475,7 @@ TAC* gen_tac_declaration(NODE* term, FRAME* frame) {
         TAC* tac = create_tac();
         tac->op = FUNC;
         tac->args.proc.name = t;
-        tac->args.proc.arity = n_formals;
+        tac->args.proc.arity = n_formals == 0 ? n_formals : n_formals - 1;
         add_tac(tac);
 
         //this used to end here with return gen_tac(code, frame);
@@ -500,17 +502,31 @@ TAC* gen_tac_call(TOKEN* token, NODE* args, FRAME* frame) {
 
     NODE* iter_args = args;
     int n_args = 0;
-    while(iter_args != NULL) {
+    while(iter_args && iter_args->type != IDENTIFIER) {
         n_args++;
         iter_args = iter_args->right;
     }
-    tac->args.call.arity = n_args;
+
+    tac->args.call.arity = n_args == 0 ? n_args : n_args - 1;
     tac->op = CALL_ENUM;
     tac->src1 = token;
+
+    //get arg/reg of arg if needed
+    if(args != NULL) {
+        TAC* arg_tac = gen_tac(args, frame);
+        tac->src2 = arg_tac->dst ? arg_tac->dst : arg_tac->src1;
+    }
+
+    tac->args.call.name = get_label();
+
     tac->dst = get_reg('t');
     add_tac(tac);
     return tac;
     //return gen_tac(f->code, new_frame);
+}
+
+TAC* gen_tac_apply(NODE* term, FRAME* frame) {
+    return NULL;
 }
 
 TAC* gen_tac(NODE* term, FRAME* frame) {
