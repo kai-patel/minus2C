@@ -322,7 +322,7 @@ static VALUE* interpret_apply(NODE* term, FRAME* frame) {
 
 static VALUE* interpret_return(NODE* term, FRAME* frame) {
     VALUE* val = interpret(term->left, frame);
-    val->retval = 1;
+    if(val) val->retval = 1;
     //printf("Returning: ");
     //print_value(val);
     //puts(" ");
